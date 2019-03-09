@@ -325,48 +325,6 @@ static char search_ascii_encode(const char *index, char code **out)
 	return -1;
 }
 
-#if 0
-static char search_ascii_encode(const char *index, char code **out)
-{
-	struct ascii_code code *encode;
-
-	if (index[0] <= '9' && index[0] >= '0') {
-		*out = ascii_tables[index[0] - '0'].encode;
-		return ascii_tables[index[0] - '0'].width;
-	}
-
-	for (encode = ascii_tables + 10;
-	     encode != ascii_tables + ARRAY_SIZE(ascii_tables); ++encode) {
-		if (encode->index[0] != index[0])
-			continue;
-		*out = encode->encode;
-		return encode->width;
-	}
-
-	return -1;
-}
-static char cmp_font_search(const void xdata *key, const void xdata *elt)
-{
-	struct character_code code *xdata *xdata _elt = elt;
-
-	return memcmp(key, (*_elt)->index, ENCODE_INDEX_SIZE);
-}
-
-static char search_character_encode(const char *index, char code **out)
-{
-	struct character_code code *xdata *xdata entry;
-
-	entry = bsearch(key, character_sort_entry,
-			ARRAY_SIZE(character_sort_entry),
-			sizeof(character_sort_entry[0]), cmp_font_search);
-	if (!entry)
-		return -1;
-
-	*out = (*entry)->encode;
-
-	return CHARACTER_WIDTH;
-}
-#else
 static char search_character_encode(const char *index, char code **out)
 {
 	struct character_code code *xdata *xdata entry;
@@ -388,7 +346,6 @@ static char search_character_encode(const char *index, char code **out)
 
 	return -1;
 }
-#endif
 
 static char cmp_font_sort(const char xdata *a, const char xdata *b)
 {
@@ -398,25 +355,14 @@ static char cmp_font_sort(const char xdata *a, const char xdata *b)
 	return memcmp((*x)->index, (*y)->index, ENCODE_INDEX_SIZE);
 }
 
-#include "usart.h"
-
+/* FIXME: Prepare for binary binary search */
 void font_sort(void)
 {
-	int i;
-	char *dat = (char *)character_sort_entry;
 	struct character_code code *xdata encode = character_tables;
 	struct character_code code *xdata *xdata entry = character_sort_entry;
 
 	while (encode != character_tables + ARRAY_SIZE(character_tables))
 		*entry++ = encode++;
-
-	for (i = 0; i < sizeof(character_sort_entry); ++i)
-		SendData(dat[i]);
-
-	SendString("\r\n");
-
-	for (i = 0; i < sizeof(character_sort_entry); ++i)
-		SendData(dat[i]);
 }
 
 char search_encode(const char *index, char code **out)

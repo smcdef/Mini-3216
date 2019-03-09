@@ -2,3 +2,5 @@
 !.gitignore
 !/hardware/
 !/user/
+!/pcb/
+!README.md

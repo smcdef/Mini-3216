@@ -43,7 +43,7 @@ static void led_on_delay(unsigned char i)
 				     unsigned char brightness,		\
 				     unsigned char fair)		\
 	{								\
-		int i;							\
+		char i;							\
 									\
 		port0##M1 &= ~(1 << column);				\
 		for (i = 0; i < 8; i++) {				\

@@ -26,9 +26,9 @@ void timer1_init(void)
 {
 	AUXR &= 0xBF;
 	TMOD &= 0x0F;
-	TL1 = 0x1F;
-	TH1 = 0xFF;
-	TF1 = 0;
-	ET1 = 1;
-	TR1 = 0;
+	TL1   = 0x1F;
+	TH1   = 0xFF;
+	TF1   = 0;
+	ET1   = 1;
+	TR1   = 0;
 }

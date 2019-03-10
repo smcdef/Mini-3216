@@ -401,10 +401,10 @@ static bool interface_switching(struct user_data pdata *user, char key)
 
 		buzzer_enter();
 		current = &set_hour_menu;
-		fb_info->offset = fb_scan_string(fb_info, 3, "设置时间");
+		fb_info->offset = fb_scan_string(fb_info, 5, "设置时间");
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + 32);
-		fb_scan(fb_info, 64, 3);
+		fb_scan(fb_info, 64, 5);
 		fb_info->offset += 32;
 		break;
 	default:
@@ -454,7 +454,7 @@ void timer0_isr() interrupt 1 using 2
 {
 	static char adc_cnt = 0;
 
-	if (++adc_cnt == 10) {
+	if (++adc_cnt == 20) {
 		adc_start(ADC_CHANNEL);
 		adc_cnt = 0;
 	}

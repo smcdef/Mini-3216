@@ -17,7 +17,7 @@
 #define ADC_CHANNEL			6
 #define DEFAULT_BRIGHTNESS		110
 #define NIGHT_MODE_BRIGHTNESS		1
-#define NIGHT_MODE_FAIR_FACTOR		130
+#define NIGHT_MODE_FAIR_FACTOR		100
 
 sbit is_rotate		= P1 ^ 0;
 
@@ -118,6 +118,13 @@ static bool should_show_temperature(struct user_data pdata *user)
 	return !user->night_mode;
 }
 
+static bool should_chime(union timekeeping *timekeeping)
+{
+	return timekeeping->time.sec == 0x58 &&
+	       timekeeping->time.min == 0x59 &&
+	       timekeeping->time.hour > 0x07 && timekeeping->time.hour < 0x23;
+}
+
 static void fb_load_times(void *priv)
 {
 	static pdata char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
@@ -137,6 +144,9 @@ static void fb_load_times(void *priv)
 	    min_old == timekeeping->time.min &&
 	    hour_old == timekeeping->time.hour && !force)
 		return;
+
+	if (should_chime(timekeeping) && !user->night_mode)
+		buzzer_chime();
 
 	if (force)
 		user->force_update = false;

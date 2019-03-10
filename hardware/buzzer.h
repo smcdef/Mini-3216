@@ -15,6 +15,6 @@
 void buzzer_power_on(void);
 void buzzer_enter(void);
 void buzzer_key(void);
-void buzzer_alarm(void);
+void buzzer_chime(void);
 
 #endif

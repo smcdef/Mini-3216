@@ -57,7 +57,7 @@ void buzzer_key(void)
 	mode = 1;
 }
 
-void buzzer_alarm(void)
+void buzzer_chime(void)
 {
 	TL1 = 0x7C;
 	TH1 = 0xFC;

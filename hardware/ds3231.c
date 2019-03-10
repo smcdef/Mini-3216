@@ -48,9 +48,9 @@ char ds3231_read_times(union timekeeping *timekeeping)
 			timekeeping->times, sizeof(timekeeping->times));
 }
 
-char ds3231_read_time(enum set_type setting, char value)
+char ds3231_read_time(enum set_type setting, char *value)
 {
-	return i2c_read(DS3231_SLAVER_ADDR, (char)setting, &value, 1);
+	return i2c_read(DS3231_SLAVER_ADDR, (char)setting, value, 1);
 }
 
 char ds3231_set_times(union timekeeping *timekeeping)

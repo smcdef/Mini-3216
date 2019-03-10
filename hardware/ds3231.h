@@ -30,7 +30,7 @@ union timekeeping {
 
 char ds3231_init(void);
 char ds3231_read_times(union timekeeping *timekeeping);
-char ds3231_read_time(enum set_type setting, char value);
+char ds3231_read_time(enum set_type setting, char *value);
 char ds3231_set_times(union timekeeping *timekeeping);
 char ds3231_set_time(enum set_type setting, char value);
 char ds3231_read_temperature(char *integer, char *decimals);

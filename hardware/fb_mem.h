@@ -4,7 +4,7 @@
 #include "core.h"
 
 unsigned char fb_scan_string(struct fb_info *fb_info, char speed,
-			     unsigned char offset, const char *s);
+			     const char *s);
 unsigned char fb_set_string(unsigned char offset, const char *s);
 
 #endif

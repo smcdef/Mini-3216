@@ -2,13 +2,12 @@
 #include "font.h"
 #include "fb_mem.h"
 
-unsigned char fb_scan_string(struct fb_info *fb_info, char speed,
-			     unsigned char offset, const char *s)
+unsigned char fb_scan_string(struct fb_info *fb_info, char speed, const char *s)
 {
 	char code *encode;
 	char width;
 	bool first = true;
-	unsigned char start_column = 0, new_columns;
+	unsigned char start_column = 0, new_columns = 0, offset = 0;
 
 	while (*s) {
 		width = search_encode(s, &encode);

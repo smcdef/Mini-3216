@@ -9,13 +9,26 @@
  */
 #include "timer.h"
 
+/* 10ms@27.000MHz */
 void timer0_init(void)
 {
 	AUXR &= 0x7F;
 	TMOD &= 0xF0;
-	TL0   = 0xF0;
-	TH0   = 0xD8;
+	TL0   = 0x1C;
+	TH0   = 0xA8;
 	TF0   = 0;
 	TR0   = 1;
 	ET0   = 1;
+}
+
+/* 100us@27.000MHz */
+void timer1_init(void)
+{
+	AUXR &= 0xBF;
+	TMOD &= 0x0F;
+	TL1 = 0x1F;
+	TH1 = 0xFF;
+	TF1 = 0;
+	ET1 = 1;
+	TR1 = 0;
 }

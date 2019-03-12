@@ -17,9 +17,9 @@
 #define ADC_CHANNEL			6
 #define DEFAULT_BRIGHTNESS		110
 #define NIGHT_MODE_BRIGHTNESS		1
-#define NIGHT_MODE_FAIR_FACTOR		100
+#define NIGHT_MODE_FAIR_FACTOR		80
 
-sbit is_rotate		= P1 ^ 0;
+sbit is_rotate = P1 ^ 0;
 
 struct menu {
 	const char *name;

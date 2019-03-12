@@ -49,11 +49,12 @@ static void led_on_delay(unsigned char i)
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
-			if (dat & mask)					\
+			if (dat & mask) {				\
 				DRIVER_ONE_LED(mask, port1, brightness);\
-			else if (fair)					\
-				led_on_delay(fair > 1 ? fair :		\
-					     brightness >> 1);		\
+				if (fair)				\
+					led_on_delay(fair - brightness);\
+			} else if (fair)				\
+				led_on_delay(fair);			\
 		}							\
 		port0##M1 = 0xff;					\
 		port1##M1 = 0xff;					\
@@ -70,12 +71,13 @@ static void led_on_delay(unsigned char i)
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
-			if (dat & mask)					\
+			if (dat & mask) {				\
 				DRIVER_ONE_LED(1 << (7 - i), port1,	\
 					       brightness);		\
-			else if (fair)					\
-				led_on_delay(fair > 1 ? fair :		\
-					     brightness >> 1);		\
+				if (fair)				\
+					led_on_delay(fair - brightness);\
+			} else if (fair)				\
+				led_on_delay(fair);			\
 		}							\
 		port0##M1 = 0xff;					\
 		port1##M1 = 0xff;					\

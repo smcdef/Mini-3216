@@ -39,7 +39,27 @@ char ds3231_init(void)
 	value &= ~(BIT(2) | BIT(3) | BIT(4));
 
 	return i2c_transfer(DS3231_SLAVER_ADDR, CONTROL_REGISTER_ADDR,
-			   &value, 1);
+			    &value, 1);
+}
+
+char ds3231_enable_oscillator(bool enable)
+{
+	char value;
+
+	if (i2c_read(DS3231_SLAVER_ADDR, CONTROL_REGISTER_ADDR, &value, 1))
+		return -1;
+
+	enable = !enable;
+	if (!!(value & BIT(7)) == !!enable)
+		return 0;
+
+	if (enable)
+		value |= BIT(7);
+	else
+		value &= ~BIT(7);
+
+	return i2c_transfer(DS3231_SLAVER_ADDR, CONTROL_REGISTER_ADDR,
+			    &value, 1);
 }
 
 char ds3231_read_times(union timekeeping *timekeeping)

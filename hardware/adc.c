@@ -3,7 +3,7 @@
 
 void adc_init(unsigned char channel)
 {
-	channel &= 0x07;
+	channel &= BIT(0) | BIT(1) | BIT(3);
 	/* P1ASF |= BIT(channel); */
 	ADC_CONTR = ADC_SPEEDHH;
 	_nop_();
@@ -17,11 +17,13 @@ void adc_init(unsigned char channel)
 
 void adc_start(unsigned char channel)
 {
+	ADC_CONTR &= ~(BIT(0) | BIT(1) | BIT(3));
 	ADC_CONTR |= channel | ADC_START;
 }
 
 unsigned char adc_read(unsigned char channel)
 {
+	channel &= BIT(0) | BIT(1) | BIT(3);
 	ADC_CONTR = ADC_POWER | ADC_SPEEDHH | channel | ADC_START;
 	_nop_();
 	_nop_();

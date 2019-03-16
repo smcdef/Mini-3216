@@ -15,9 +15,10 @@
 #include <string.h>
 
 #define ADC_CHANNEL			6
-#define DEFAULT_BRIGHTNESS		110
-#define NIGHT_MODE_BRIGHTNESS		1
-#define NIGHT_MODE_FAIR_FACTOR		80
+#define DEFAULT_BRIGHTNESS		150
+#define NIGHT_MODE_BRIGHTNESS		2
+#define NIGHT_MODE_FAIR_FACTOR		50
+#define SCAN_SPEED_BRIGHTNESS		55
 
 sbit is_rotate = P1 ^ 0;
 
@@ -36,6 +37,7 @@ struct user_data {
 	bool night_mode;
 	struct {
 		unsigned char brightness;
+		bool oscillator_on;
 	} settings;
 	unsigned char offset;
 	bool force_update;
@@ -188,11 +190,17 @@ static void fb_load_times(void *priv)
 		if (!is_temp) {
 			unsigned char brightness = fb_info->brightness;
 
-			fb_info->brightness >>= 1;
-			fb_info->brightness += 1;
+			/**
+			 * fb_info->brightness maybe alter in irq.
+			 * So we should disable irq to protect shared
+			 * variable.
+			 */
+			local_irq_disable();
+			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
 			fb_scan(fb_info, 64, 1);
 			fb_info->brightness = brightness;
+			local_irq_enable();
 			is_temp = true;
 		}
 		fb_info->offset = MATRIXS_COLUMNS;
@@ -201,10 +209,16 @@ static void fb_load_times(void *priv)
 		if (is_temp) {
 			unsigned char brightness = fb_info->brightness;
 
-			fb_info->brightness >>= 1;
-			fb_info->brightness += 1;
+			/**
+			 * fb_info->brightness maybe alter in irq.
+			 * So we should disable irq to protect shared
+			 * variable.
+			 */
+			local_irq_disable();
+			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 			fb_scan_reverse(fb_info, 64, 1);
 			fb_info->brightness = brightness;
+			local_irq_enable();
 			is_temp = false;
 		}
 		fb_info->offset = 0;
@@ -455,7 +469,16 @@ void main(void)
 		}
 		if (current && current->operate)
 			current->operate(current->private);
+		/**
+		 * We really should disable local irq all tht time.
+		 * But we can not do this, because if we do than,
+		 * the buzzer_chime() will work abnormal.
+		 */
+		if (user_data.night_mode)
+			local_irq_disable();
 		fb_show(fb_info);
+		if (user_data.night_mode)
+			local_irq_enable();
 	}
 }
 

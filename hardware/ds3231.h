@@ -20,12 +20,8 @@ union timekeeping {
 		char sec;
 		char min;
 		char hour;
-		char day;
-		char date;
-		char month;
-		char year;
 	} time;
-	char times[7];
+	char times[3];
 };
 
 char ds3231_init(void);

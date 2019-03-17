@@ -85,7 +85,7 @@ static void led_on_delay(unsigned char i)
 	}								\
 									\
 /* Just for macro definition ends with a semicolon for Keil C51 */	\
-static pdata char __dummy_##n##_unused__
+static xdata char __dummy_##n##_unused__
 
 DECLARE_MATRIX_DISP(0, P3, P0);
 DECLARE_MATRIX_DISP(1, P3, P2);

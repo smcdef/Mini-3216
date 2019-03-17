@@ -54,13 +54,13 @@ static struct menu xdata *current;
 
 static struct user_data pdata user_data;
 
-static void user_data_init(struct user_data *user)
+static void user_data_init(void)
 {
-	memset(user, 0, sizeof(*user));
-	user->fb_info.brightness = DEFAULT_BRIGHTNESS;
-	user->settings.brightness = DEFAULT_BRIGHTNESS;
-	user->fb_info.fair = false;
-	user->force_update = true;
+	memset(&user_data, 0, sizeof(user_data));
+	user_data.fb_info.brightness = DEFAULT_BRIGHTNESS;
+	user_data.settings.brightness = DEFAULT_BRIGHTNESS;
+	user_data.fb_info.fair = false;
+	user_data.force_update = true;
 #ifdef CONFIG_DS3231_INT
 	user_data.rtc_update = true;
 #endif
@@ -458,10 +458,10 @@ void main(void)
 {
 	struct fb_info pdata *fb_info = &user_data.fb_info;
 
+	user_data_init();
 	buzzer_power_on();
 	uart_init();
 	touch_key_init();
-	user_data_init(&user_data);
 	fb_clear(0, 64);
 	i2c_init();
 	ds3231_init();

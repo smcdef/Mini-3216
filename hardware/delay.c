@@ -5,7 +5,7 @@ void mdelay(unsigned int ms)
 	unsigned int i;
 
 	do {
-		i = MAIN_FOSC / 13000;
+		i = CONFIG_MAIN_FOSC / 13000;
 		while (--i);
 	} while (--ms);
 }

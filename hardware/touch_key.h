@@ -8,5 +8,6 @@
 #define KEY_LEFT		BIT(2)
 
 char touch_key_read(char *key_value);
+void touch_key_init(void);
 
 #endif

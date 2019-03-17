@@ -1,8 +1,39 @@
 #include "touch_key.h"
 #include "delay.h"
 
-sbit Data  = P5 ^ 5;
-sbit Clock = P5 ^ 4;
+#ifdef CONFIG_BS813A
+sbit key1 = P5 ^ 4;
+sbit key2 = P5 ^ 5;
+sbit key3 = P1 ^ 2;
+
+char touch_key_read(char *key_value)
+{
+	char count = 0;
+
+	*key_value = 0;
+	if (key1 == 0) {
+		count++;
+		*key_value |= KEY_ENTER;
+	}
+	if (key2 == 0) {
+		count++;
+		*key_value |= KEY_RIGHT;
+	}
+	if (key3 == 0) {
+		count++;
+		*key_value |= KEY_LEFT;
+	}
+
+	return count;
+}
+
+void touch_key_init(void)
+{
+}
+#else
+sbit unused = P1 ^ 2;
+sbit Data   = P5 ^ 5;
+sbit Clock  = P5 ^ 4;
 
 static char key_read_byte(void)
 {
@@ -30,3 +61,9 @@ char touch_key_read(char *key_value)
 
 	return (dat >> 4) & (BIT(0) | BIT(1) | BIT(2));
 }
+
+void touch_key_init(void)
+{
+	unused = 0;
+}
+#endif /* CONFIG_BS813A */

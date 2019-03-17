@@ -447,6 +447,7 @@ void main(void)
 
 	buzzer_power_on();
 	uart_init();
+	touch_key_init();
 	user_data_init(&user_data);
 	fb_clear(0, 64);
 	i2c_init();

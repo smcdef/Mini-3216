@@ -500,11 +500,11 @@ void adc_isr(void) interrupt 5 using 1
 
 	ADC_CONTR &= ~ADC_FLAG;
 	result = ADC_RES;
-	if (result > 0xf0) {
+	if (result > 0xf0 && !user_data.night_mode) {
 		user_data.night_mode = true;
 		user_data.fb_info.fair = NIGHT_MODE_FAIR_FACTOR;
 		user_data.fb_info.brightness = NIGHT_MODE_BRIGHTNESS;
-	} else if (result < 0xc8) {
+	} else if (result < 0xc8 && user_data.night_mode) {
 		user_data.night_mode = false;
 		user_data.fb_info.brightness = user_data.settings.brightness;
 		user_data.fb_info.fair = false;

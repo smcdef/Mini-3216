@@ -2,7 +2,6 @@
 #include "delay.h"
 
 #define ADC_POWER               0x80
-#define ADC_FLAG                0x10
 #define ADC_START               0x08
 #define ADC_SPEEDLL             0x00
 #define ADC_SPEEDL              0x20
@@ -11,7 +10,7 @@
 
 void adc_init(unsigned char channel)
 {
-	channel &= BIT(0) | BIT(1) | BIT(3);
+	channel &= GENMASK(2, 0);
 	/* P1ASF |= BIT(channel); */
 	ADC_CONTR = ADC_SPEEDHH;
 	_nop_();
@@ -25,13 +24,13 @@ void adc_init(unsigned char channel)
 
 void adc_start(unsigned char channel)
 {
-	ADC_CONTR &= ~(BIT(0) | BIT(1) | BIT(3));
+	ADC_CONTR &= ~GENMASK(2, 0);
 	ADC_CONTR |= channel | ADC_START;
 }
 
 unsigned char adc_read(unsigned char channel)
 {
-	channel &= BIT(0) | BIT(1) | BIT(3);
+	channel &= GENMASK(2, 0);
 	ADC_CONTR = ADC_POWER | ADC_SPEEDHH | channel | ADC_START;
 	_nop_();
 	_nop_();

@@ -64,7 +64,7 @@ char touch_key_read(char *key_value)
 	if (key_value)
 		*key_value = value;
 
-	return (dat >> 4) & (BIT(0) | BIT(1) | BIT(2));
+	return (dat >> 4) & GENMASK(2, 0);
 }
 
 void touch_key_init(void)

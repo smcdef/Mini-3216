@@ -27,4 +27,13 @@ typedef char bool;
 
 #define BIT(nr)			(1U << (nr))
 
+/*
+ * Create a contiguous bitmask starting at bit position @l and ending at
+ * position @h. For example
+ * GENMASK(4, 1) gives us the 16bit vector 0x001e.
+ */
+#define BITS_PER_INT		16
+#define GENMASK(h, l) \
+	(((~0U) - (1U << (l)) + 1) & (~0U >> (BITS_PER_INT - 1 - (h))))
+
 #endif

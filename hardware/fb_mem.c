@@ -12,12 +12,11 @@ unsigned char fb_scan_string(struct fb_info *fb_info, char speed, const char *s)
 	while (*s) {
 		width = search_encode(s, &encode);
 		/* skip invalid input */
-		if (width == -1) {
-			width = 0;
+		if (width < 0) {
 			s += *encode;
-		} else {
-			s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
+			continue;
 		}
+		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
 		offset += fb_set(offset, encode, width);
 		new_columns += width;
 		if (offset > FB_HALF_COLUMNS - CHARACTER_WIDTH && !first) {
@@ -52,6 +51,11 @@ unsigned char fb_set_string(unsigned char offset, const char *s)
 	while (*s) {
 		char width = search_encode(s, &encode);
 
+		/* skip invalid input */
+		if (width < 0) {
+			s += *encode;
+			continue;
+		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
 		offset += fb_set(offset, encode, width);
 		n += width;

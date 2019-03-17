@@ -35,6 +35,9 @@ struct user_data {
 	union timekeeping timekeeping;
 	struct fb_info fb_info;
 	bool night_mode;
+#ifdef CONFIG_DS3231_INT
+	bool rtc_update;
+#endif
 	struct {
 		unsigned char brightness;
 		bool oscillator_on;
@@ -58,6 +61,9 @@ static void user_data_init(struct user_data *user)
 	user->settings.brightness = DEFAULT_BRIGHTNESS;
 	user->fb_info.fair = false;
 	user->force_update = true;
+#ifdef CONFIG_DS3231_INT
+	user_data.rtc_update = true;
+#endif
 }
 
 static void pca_init(void)
@@ -66,8 +72,10 @@ static void pca_init(void)
 	CL	= 0;
 	CH	= 0;
 	CMOD	= 0x00;
-	CCAPM0	= 0x21;
-	CCAPM1	= 0x31;
+#ifdef CONFIG_DS3231_INT
+	CCAPM0	= 0x21;		/* Rising edge */
+#endif
+	CCAPM1	= 0x31;		/* Rising and falling edges */
 	CR	= 1;
 }
 
@@ -139,6 +147,11 @@ static void fb_load_times(void *priv)
 	static bool is_temp = false;
 	unsigned char offset = 0;
 
+#ifdef CONFIG_DS3231_INT
+	if (!user->rtc_update)
+		return;
+	user->rtc_update = false;
+#endif
 	if (ds3231_read_times(timekeeping))
 		return;
 
@@ -514,9 +527,13 @@ void adc_isr(void) interrupt 5 using 1
 
 void pca_isr(void) interrupt 7 using 2
 {
+#ifdef CONFIG_DS3231_INT
 	if (CCF0) {
 		CCF0 = 0;
-	} if (CCF1) {
+		user_data.rtc_update = true;
+	}
+#endif
+	if (CCF1) {
 		CCF1 = 0;
 		user_data.fb_info.rotate = !is_rotate;
 	}

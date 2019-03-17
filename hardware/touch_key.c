@@ -8,21 +8,23 @@ sbit key3 = P1 ^ 2;
 
 char touch_key_read(char *key_value)
 {
-	char count = 0;
+	char count = 0, value = 0;
 
-	*key_value = 0;
 	if (key1 == 0) {
 		count++;
-		*key_value |= KEY_ENTER;
+		value |= KEY_ENTER;
 	}
 	if (key2 == 0) {
 		count++;
-		*key_value |= KEY_RIGHT;
+		value |= KEY_RIGHT;
 	}
 	if (key3 == 0) {
 		count++;
-		*key_value |= KEY_LEFT;
+		value |= KEY_LEFT;
 	}
+
+	if (key_value)
+		*key_value = value;
 
 	return count;
 }
@@ -56,8 +58,11 @@ static char key_read_byte(void)
 char touch_key_read(char *key_value)
 {
 	char dat = key_read_byte();
+	char value;
 
-	*key_value = ~dat & (KEY_ENTER | KEY_LEFT | KEY_RIGHT);
+	value = ~dat & (KEY_ENTER | KEY_LEFT | KEY_RIGHT);
+	if (key_value)
+		*key_value = value;
 
 	return (dat >> 4) & (BIT(0) | BIT(1) | BIT(2));
 }

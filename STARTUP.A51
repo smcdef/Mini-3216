@@ -31,11 +31,11 @@ IDATALEN        EQU     80H
 ;
 ; <o> XDATASTART: XDATA memory start address <0x0-0xFFFF>
 ;     <i> The absolute start address of XDATA memory
-XDATASTART      EQU     0
+XDATASTART      EQU     0xFF + 1
 ;
 ; <o> XDATALEN: XDATA memory size <0x0-0xFFFF>
 ;     <i> The length of XDATA memory in bytes.
-XDATALEN        EQU     0
+XDATALEN        EQU     0x800 - 0xFF - 0xFF
 ;
 ; <o> PDATASTART: PDATA memory start address <0x0-0xFFFF>
 ;     <i> The absolute start address of PDATA memory
@@ -43,7 +43,7 @@ PDATASTART      EQU     0H
 ;
 ; <o> PDATALEN: PDATA memory size <0x0-0xFF>
 ;     <i> The length of PDATA memory in bytes.
-PDATALEN        EQU     0H
+PDATALEN        EQU     0xFF
 ;
 ;</h>
 ;------------------------------------------------------------------------------

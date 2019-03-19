@@ -120,7 +120,7 @@ static unsigned int fb_load_temperature(unsigned int offset)
 		p = str;
 	}
 err:
-	return fb_set_string(offset, p);
+	return fb_copy_string(offset, p);
 }
 
 static bool should_show_temperature(struct user_data pdata *user)
@@ -174,7 +174,7 @@ static void fb_load_times(void *priv)
 		str[2] = hour_old % 16 + '0';
 		str[3] = ' ';
 		str[4] = '\0';
-		offset += fb_set_string(offset, str);
+		offset += fb_copy_string(offset, str);
 	} else {
 		offset += 14;
 	}
@@ -185,7 +185,7 @@ static void fb_load_times(void *priv)
 		str[0] = 'v';
 	str[1] = ' ';
 	str[2] = '\0';
-	offset += fb_set_string(offset, str);
+	offset += fb_copy_string(offset, str);
 
 	if (min_old != timekeeping->time.min || force) {
 		min_old = timekeeping->time.min;
@@ -193,7 +193,7 @@ static void fb_load_times(void *priv)
 		str[1] = ' ';
 		str[2] = min_old % 16 + '0';
 		str[3] = '\0';
-		offset += fb_set_string(offset, str);
+		offset += fb_copy_string(offset, str);
 	} else {
 		offset += 13;
 	}
@@ -251,8 +251,8 @@ static unsigned int fb_load_time(unsigned int offset, enum set_type type,
 
 	str[1] = value / 16 + '0';
 	str[3] = value % 16 + '0';
-	offset += fb_set_string(offset, str);
-	offset += fb_set_string(offset, s);
+	offset += fb_copy_string(offset, str);
+	offset += fb_copy_string(offset, s);
 
 	return offset_old - offset;
 }
@@ -393,7 +393,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 			user->offset += current->fb_load(fb_info->offset +
 							 MATRIXS_COLUMNS);
 		else
-			user->offset += fb_set_string(user->offset,
+			user->offset += fb_copy_string(user->offset,
 						      current->name);
 		fb_scan(fb_info, 64, 2);
 		fb_info->offset += MATRIXS_COLUMNS;
@@ -402,7 +402,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		if (!current->sibling_prev)
 			break;
 		buzzer_key();
-		user->offset += fb_set_string(user->offset,
+		user->offset += fb_copy_string(user->offset,
 					current->sibling_prev->name);
 		fb_scan_reverse(fb_info, 64, 1);
 		fb_info->offset -= MATRIXS_COLUMNS;
@@ -412,7 +412,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		if (!current->sibling_next)
 			break;
 		buzzer_key();
-		user->offset += fb_set_string(user->offset,
+		user->offset += fb_copy_string(user->offset,
 					current->sibling_next->name);
 		fb_scan(fb_info, 64, 1);
 		fb_info->offset += MATRIXS_COLUMNS;
@@ -427,7 +427,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 			break;
 		buzzer_enter();
 		current = current->child;
-		user->offset += fb_set_string(user->offset, current->name);
+		user->offset += fb_copy_string(user->offset, current->name);
 		fb_scan(fb_info, 64, 1);
 		fb_info->offset += MATRIXS_COLUMNS;
 		break;
@@ -462,7 +462,7 @@ void main(void)
 	buzzer_power_on();
 	uart_init();
 	touch_key_init();
-	fb_clear(0, 64);
+	fb_set(0, 0, 64);
 	i2c_init();
 	ds3231_init();
 	font_sort();

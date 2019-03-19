@@ -251,7 +251,7 @@ void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 /**
  * @offset + @width should range [0, FB_SIZE / 2].
  */
-unsigned int fb_set(unsigned int offset, const char *src, unsigned int width)
+unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 {
 	char MEMORY_TYPE *fb = frame_buffer;
 	unsigned int ret = width;
@@ -269,7 +269,7 @@ unsigned int fb_set(unsigned int offset, const char *src, unsigned int width)
 	return ret;
 }
 
-unsigned int fb_clear(unsigned int offset, unsigned int width)
+unsigned int fb_set(unsigned int offset, char c, unsigned int width)
 {
 	char MEMORY_TYPE *fb = frame_buffer;
 	unsigned int ret = width;
@@ -279,7 +279,7 @@ unsigned int fb_clear(unsigned int offset, unsigned int width)
 
 	width <<= 1;
 	while (width--) {
-		*fb++ = 0;
+		*fb++ = c;
 		if (fb == frame_buffer + sizeof(frame_buffer))
 			fb = frame_buffer;
 	}

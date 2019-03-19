@@ -17,7 +17,7 @@ unsigned int fb_scan_string(struct fb_info *fb_info, char speed, const char *s)
 			continue;
 		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
-		offset += fb_set(offset, encode, width);
+		offset += fb_copy(offset, encode, width);
 		new_columns += width;
 		if (offset > FB_COLUMNS - MATRIXS_COLUMNS - CHARACTER_WIDTH &&
 		    !first) {
@@ -44,7 +44,7 @@ unsigned int fb_scan_string(struct fb_info *fb_info, char speed, const char *s)
 	return start_column + new_columns;
 }
 
-unsigned int fb_set_string(unsigned int offset, const char *s)
+unsigned int fb_copy_string(unsigned int offset, const char *s)
 {
 	char code *encode;
 	unsigned int n = 0;
@@ -58,7 +58,7 @@ unsigned int fb_set_string(unsigned int offset, const char *s)
 			continue;
 		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
-		offset += fb_set(offset, encode, width);
+		offset += fb_copy(offset, encode, width);
 		n += width;
 	}
 

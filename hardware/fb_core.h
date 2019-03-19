@@ -30,8 +30,8 @@ void fb_show(struct fb_info *fb_info);
 void fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed);
 void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 		     unsigned char speed);
-unsigned int fb_set(unsigned int offset, const char *src,
+unsigned int fb_copy(unsigned int offset, const char *src,
 		     unsigned int width);
-unsigned int fb_clear(unsigned int offset, unsigned int width);
+unsigned int fb_set(unsigned int offset, char c, unsigned int width);
 
 #endif

@@ -11,12 +11,15 @@
 #define MATRIXS_COLUMNS			(MATRIX_COLUMNS << 2)
 #define MATRIXS_COLUMNS_MASK		(MATRIXS_COLUMNS - 1)
 
-#define FB_SIZE				128
+/**
+ * FB_SIZE must be 2 to the power of n. Also, it should greater than or
+ * equal to 128. For example 128, 256, 512, 1024 or 2048...
+ */
+#define FB_SIZE				1024
 #define FB_COLUMNS			(FB_SIZE >> 1)
-#define FB_HALF_COLUMNS			(FB_COLUMNS >> 1)
 
 struct fb_info {
-	char offset;
+	unsigned int offset;
 	bool rotate;
 	unsigned char fair;
 	unsigned char brightness;
@@ -24,10 +27,11 @@ struct fb_info {
 
 void fb_off(void);
 void fb_show(struct fb_info *fb_info);
-void fb_scan(struct fb_info *fb_info, unsigned char n, char speed);
-void fb_scan_reverse(struct fb_info *fb_info, unsigned char n, char speed);
-unsigned char fb_set(unsigned char offset, const char *src,
-		     unsigned char width);
-unsigned char fb_clear(unsigned char offset, unsigned char width);
+void fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed);
+void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
+		     unsigned char speed);
+unsigned int fb_set(unsigned int offset, const char *src,
+		     unsigned int width);
+unsigned int fb_clear(unsigned int offset, unsigned int width);
 
 #endif

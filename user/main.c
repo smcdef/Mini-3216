@@ -28,7 +28,7 @@ struct menu {
 	struct menu xdata *sibling_next, *sibling_prev;
 	void *private;
 	void (code *operate)(void *private);
-	unsigned char (code *fb_load)(unsigned char offset);
+	unsigned int (code *fb_load)(unsigned int offset);
 };
 
 struct user_data {
@@ -42,7 +42,7 @@ struct user_data {
 		unsigned char brightness;
 		bool oscillator_on;
 	} settings;
-	unsigned char offset;
+	unsigned int offset;
 	bool force_update;
 	char key;
 };
@@ -89,7 +89,7 @@ static void local_irq_enable(void)
 	EA = 1;
 }
 
-static unsigned char fb_load_temperature(unsigned char offset)
+static unsigned int fb_load_temperature(unsigned int offset)
 {
 	char str[] = {
 		' ', '-', ' ', '-', ' ', '.',
@@ -145,7 +145,7 @@ static void fb_load_times(void *priv)
 	char str[5];
 	char half_low;
 	static bool is_temp = false;
-	unsigned char offset = 0;
+	unsigned int offset = 0;
 
 #ifdef CONFIG_DS3231_INT
 	if (!user->rtc_update)
@@ -239,11 +239,11 @@ static void fb_load_times(void *priv)
 	}
 }
 
-static unsigned char fb_load_time(unsigned char offset, enum set_type type,
-				  const char *s)
+static unsigned int fb_load_time(unsigned int offset, enum set_type type,
+				 const char *s)
 {
 	char value;
-	unsigned char offset_old = offset;
+	unsigned int offset_old = offset;
 	char str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
 
 	if (ds3231_read_time(type, &value))
@@ -257,12 +257,12 @@ static unsigned char fb_load_time(unsigned char offset, enum set_type type,
 	return offset_old - offset;
 }
 
-static unsigned char fb_load_hour(unsigned char offset)
+static unsigned int fb_load_hour(unsigned int offset)
 {
 	return fb_load_time(offset, SET_HOUR, "时");
 }
 
-static unsigned char fb_load_minute(unsigned char offset)
+static unsigned int fb_load_minute(unsigned int offset)
 {
 	return fb_load_time(offset, SET_MINUTES, "分");
 }

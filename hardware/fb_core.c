@@ -14,7 +14,15 @@
  * +--------------+---------------+---------------+---------------+
  */
 
-static pdata char frame_buffer[FB_SIZE];
+#if FB_SIZE > 0xff
+#define MEMORY_TYPE		xdata
+#else
+#define MEMORY_TYPE		pdata
+#endif
+
+#define FB_HALF_SIZE_MASK	(sizeof(frame_buffer) / 2 - 1)
+
+static char MEMORY_TYPE frame_buffer[FB_SIZE];
 
 struct fb_column_info {
 	char column;
@@ -107,7 +115,7 @@ static void fb_show_column(struct fb_column_info *fb_column_info)
 {
 	char m = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
 	char n = fb_column_info->column & MATRIX_COLUMNS_MASK;
-	char brightness = fb_column_info->brightness;
+	unsigned char brightness = fb_column_info->brightness;
 	unsigned char fair = fb_column_info->fair;
 
 	switch(m) {
@@ -182,14 +190,12 @@ void fb_show(struct fb_info *fb_info)
 {
 	unsigned char i;
 	struct fb_column_info fb_column_info;
-	pdata char *fb = frame_buffer;
+	char MEMORY_TYPE *fb = frame_buffer;
 	void (code *show)(struct fb_column_info *fb_column_info);
 
-	fb_info->offset &= sizeof(frame_buffer) / 2 - 1;
+	fb_info->offset &= FB_HALF_SIZE_MASK;
 	fb_column_info.fair = fb_info->fair;
 	fb_column_info.brightness = fb_info->brightness;
-	if (fb_info->offset < 0)
-		fb += sizeof(frame_buffer);
 	fb += fb_info->offset << 1;
 
 	show = fb_info->rotate ? fb_show_column_rotate : fb_show_column;
@@ -204,50 +210,53 @@ void fb_show(struct fb_info *fb_info)
 }
 
 /**
- * @n should range [32, 64]
+ * @n should range [32, FB_SIZE / 2]
  */
-void fb_scan(struct fb_info *fb_info, unsigned char n, char speed)
+void fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed)
 {
-	char i, j;
-	char offset = fb_info->offset;
+	unsigned int i, offset = fb_info->offset;
+	unsigned char j;
+
+	if (n > FB_SIZE / 2 || n < 32)
+		return;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
-		for (j = 0; j < speed; ++j) {
-			fb_info->offset = offset + i;
+		for (j = 0; j < speed; ++j)
 			fb_show(fb_info);
-		}
+		fb_info->offset++;
 	}
 	fb_info->offset = offset;
 }
 
 /**
- * @n should range [32, 64]
+ * @n should range [32, FB_SIZE / 2]
  */
-void fb_scan_reverse(struct fb_info *fb_info, unsigned char n, char speed)
+void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
+		     unsigned char speed)
 {
-	char i, j;
-	char offset = fb_info->offset;
+	unsigned int i, offset = fb_info->offset;
+	unsigned char j;
+
+	if (n > FB_SIZE / 2 || n < 32)
+		return;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
-		for (j = 0; j < speed; ++j) {
-			fb_info->offset = offset - i;
+		for (j = 0; j < speed; ++j)
 			fb_show(fb_info);
-		}
+		fb_info->offset--;
 	}
 	fb_info->offset = offset;
 }
 
 /**
- * @column_offset + @width should range [0, 64].
+ * @offset + @width should range [0, FB_SIZE / 2].
  */
-unsigned char fb_set(unsigned char offset, const char *src, unsigned char width)
+unsigned int fb_set(unsigned int offset, const char *src, unsigned int width)
 {
-	pdata char *fb = frame_buffer;
-	unsigned char ret = width;
+	char MEMORY_TYPE *fb = frame_buffer;
+	unsigned int ret = width;
 
-	offset &= sizeof(frame_buffer) / 2 - 1;
-	if (offset < 0)
-		fb += sizeof(frame_buffer);
+	offset &= FB_HALF_SIZE_MASK;
 	fb += offset << 1;
 
 	width <<= 1;
@@ -260,14 +269,12 @@ unsigned char fb_set(unsigned char offset, const char *src, unsigned char width)
 	return ret;
 }
 
-unsigned char fb_clear(unsigned char offset, unsigned char width)
+unsigned int fb_clear(unsigned int offset, unsigned int width)
 {
-	pdata char *fb = frame_buffer;
-	unsigned char ret = width;
+	char MEMORY_TYPE *fb = frame_buffer;
+	unsigned int ret = width;
 
-	offset &= sizeof(frame_buffer) / 2 - 1;
-	if (offset < 0)
-		fb += sizeof(frame_buffer);
+	offset &= FB_HALF_SIZE_MASK;
 	fb += offset << 1;
 
 	width <<= 1;

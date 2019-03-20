@@ -2,7 +2,8 @@
 #include "font.h"
 #include "fb_mem.h"
 
-unsigned int fb_scan_string(struct fb_info *fb_info, char speed, const char *s)
+unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
+			    const char *s)
 {
 	char code *encode;
 	bool first = true;

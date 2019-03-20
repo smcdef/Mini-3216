@@ -201,7 +201,7 @@ static void fb_load_times(void *priv)
 	half_low = sec_old & 0x0f;
 	if (half_low > 2 && half_low < 5 && should_show_temperature(user)) {
 		if (!is_temp) {
-			unsigned char brightness = fb_info->brightness;
+			unsigned char brightness;
 
 			/**
 			 * fb_info->brightness maybe alter in irq.
@@ -209,6 +209,12 @@ static void fb_load_times(void *priv)
 			 * variable.
 			 */
 			local_irq_disable();
+			/**
+			 * Re-check under disable irq.
+			 */
+			if (!should_show_temperature(user))
+				return;
+			brightness = fb_info->brightness;
 			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
 			fb_info->offset = fb_scan(fb_info, 64, 1);
@@ -217,7 +223,7 @@ static void fb_load_times(void *priv)
 			is_temp = true;
 		}
 	} else if (is_temp) {
-		unsigned char brightness = fb_info->brightness;
+		unsigned char brightness;
 
 		/**
 		 * fb_info->brightness maybe alter in irq.
@@ -225,7 +231,13 @@ static void fb_load_times(void *priv)
 		 * variable.
 		 */
 		local_irq_disable();
-		fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
+		brightness = fb_info->brightness;
+		/**
+		 * If we are in night mode, we should not increase
+		 * the brightness.
+		 */
+		if (!user->night_mode)
+			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
 		fb_info->brightness = brightness;
 		local_irq_enable();

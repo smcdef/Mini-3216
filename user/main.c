@@ -19,6 +19,7 @@
 #define NIGHT_MODE_BRIGHTNESS		2
 #define NIGHT_MODE_FAIR_FACTOR		50
 #define SCAN_SPEED_BRIGHTNESS		55
+#define SEETING_TIME_SCAN_SPEED		2
 
 sbit is_rotate = P1 ^ 0;
 
@@ -90,7 +91,7 @@ static void local_irq_enable(void)
 
 static unsigned int fb_load_temperature(unsigned int offset)
 {
-	char str[] = {
+	char pdata str[] = {
 		' ', '-', ' ', '-', ' ', '.',
 		' ', '-', ' ', 'c', '\0',
 	};
@@ -141,7 +142,7 @@ static void fb_load_times(void *priv)
 	pdata union timekeeping *timekeeping = &user->timekeeping;
 	pdata struct fb_info *fb_info = &user->fb_info;
 	bool force = user->force_update;
-	char str[5];
+	char pdata str[5];
 	char half_low;
 	static bool is_temp = false;
 	unsigned int offset = 0;
@@ -237,7 +238,7 @@ static unsigned int fb_load_time(unsigned int offset, enum set_type type,
 {
 	char value;
 	unsigned int offset_old = offset;
-	char str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
+	char pdata str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
 
 	if (ds3231_read_time(type, &value))
 		return 0;
@@ -368,6 +369,9 @@ static bool interface_switching(struct user_data pdata *user, char key)
 	struct fb_info pdata *fb_info = &user->fb_info;
 	struct menu xdata *current_old = current;
 	bool success = false;
+#if CONFIG_FB_SIZE > 128
+	unsigned int offset;
+#endif
 
 	switch (key) {
 	case KEY_ENTER:
@@ -426,11 +430,21 @@ static bool interface_switching(struct user_data pdata *user, char key)
 
 		buzzer_enter();
 		current = &set_hour_menu;
-		fb_info->offset = fb_scan_string(fb_info, 5, "设置时间");
+#if CONFIG_FB_SIZE > 128
+		offset = fb_info->offset + MATRIXS_COLUMNS;
+		offset += fb_copy_string(offset, "设置时间");
 		if (current->fb_load)
-			current->fb_load(fb_info->offset + 32);
-		fb_scan(fb_info, 64, 5);
-		fb_info->offset += 32;
+			offset += current->fb_load(offset);
+		fb_info->offset = fb_scan(fb_info, 128,
+					  SEETING_TIME_SCAN_SPEED);
+#else
+		fb_info->offset = fb_scan_string(fb_info,
+						 SEETING_TIME_SCAN_SPEED,
+						 "设置时间");
+		if (current->fb_load)
+			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
+		fb_info->offset = fb_scan(fb_info, 64, SEETING_TIME_SCAN_SPEED);
+#endif
 		break;
 	default:
 		return false;

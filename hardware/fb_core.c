@@ -212,13 +212,14 @@ void fb_show(struct fb_info *fb_info)
 /**
  * @n should range [32, FB_SIZE / 2]
  */
-void fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed)
+unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
+		     unsigned char speed)
 {
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
 	if (n > FB_SIZE / 2 || n < 32)
-		return;
+		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
 		for (j = 0; j < speed; ++j)
@@ -226,19 +227,21 @@ void fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed)
 		fb_info->offset++;
 	}
 	fb_info->offset = offset;
+
+	return offset + n - MATRIXS_COLUMNS;
 }
 
 /**
  * @n should range [32, FB_SIZE / 2]
  */
-void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
-		     unsigned char speed)
+unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
+			     unsigned char speed)
 {
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
 	if (n > FB_SIZE / 2 || n < 32)
-		return;
+		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
 		for (j = 0; j < speed; ++j)
@@ -246,6 +249,8 @@ void fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 		fb_info->offset--;
 	}
 	fb_info->offset = offset;
+
+	return offset - (n - MATRIXS_COLUMNS);
 }
 
 /**
@@ -271,18 +276,11 @@ unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 
 unsigned int fb_set(unsigned int offset, char c, unsigned int width)
 {
-	char MEMORY_TYPE *fb = frame_buffer;
 	unsigned int ret = width;
+	const char arr[2] = { 0 };
 
-	offset &= FB_HALF_SIZE_MASK;
-	fb += offset << 1;
-
-	width <<= 1;
-	while (width--) {
-		*fb++ = c;
-		if (fb == frame_buffer + sizeof(frame_buffer))
-			fb = frame_buffer;
-	}
+	while (width--)
+		offset += fb_copy(offset, arr, 1);
 
 	return ret;
 }

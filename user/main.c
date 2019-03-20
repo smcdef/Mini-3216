@@ -42,7 +42,6 @@ struct user_data {
 		unsigned char brightness;
 		bool oscillator_on;
 	} settings;
-	unsigned int offset;
 	bool force_update;
 	char key;
 };
@@ -211,31 +210,25 @@ static void fb_load_times(void *priv)
 			local_irq_disable();
 			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
-			fb_scan(fb_info, 64, 1);
+			fb_info->offset = fb_scan(fb_info, 64, 1);
 			fb_info->brightness = brightness;
 			local_irq_enable();
 			is_temp = true;
 		}
-		fb_info->offset = MATRIXS_COLUMNS;
-		user->offset = 0;
-	} else {
-		if (is_temp) {
-			unsigned char brightness = fb_info->brightness;
+	} else if (is_temp) {
+		unsigned char brightness = fb_info->brightness;
 
-			/**
-			 * fb_info->brightness maybe alter in irq.
-			 * So we should disable irq to protect shared
-			 * variable.
-			 */
-			local_irq_disable();
-			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
-			fb_scan_reverse(fb_info, 64, 1);
-			fb_info->brightness = brightness;
-			local_irq_enable();
-			is_temp = false;
-		}
-		fb_info->offset = 0;
-		user->offset = MATRIXS_COLUMNS;
+		/**
+		 * fb_info->brightness maybe alter in irq.
+		 * So we should disable irq to protect shared
+		 * variable.
+		 */
+		local_irq_disable();
+		fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
+		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
+		fb_info->brightness = brightness;
+		local_irq_enable();
+		is_temp = false;
 	}
 }
 
@@ -384,38 +377,33 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		buzzer_enter();
 		current = current->child;
 		if (is_root_menu(current)) {
-			user->offset = 0;
+			fb_info->offset = 0;
 			user->force_update = true;
 			break;
 		}
 
 		if (current->fb_load)
-			user->offset += current->fb_load(fb_info->offset +
-							 MATRIXS_COLUMNS);
+			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
 		else
-			user->offset += fb_copy_string(user->offset,
-						      current->name);
-		fb_scan(fb_info, 64, 2);
-		fb_info->offset += MATRIXS_COLUMNS;
+			fb_copy_string(fb_info->offset, current->name);
+		fb_info->offset = fb_scan(fb_info, 64, 2);
 		break;
 	case KEY_LEFT:
 		if (!current->sibling_prev)
 			break;
 		buzzer_key();
-		user->offset += fb_copy_string(user->offset,
+		fb_copy_string(fb_info->offset - MATRIXS_COLUMNS,
 					current->sibling_prev->name);
-		fb_scan_reverse(fb_info, 64, 1);
-		fb_info->offset -= MATRIXS_COLUMNS;
+		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
 		current = current->sibling_prev;
 		break;
 	case KEY_RIGHT:
 		if (!current->sibling_next)
 			break;
 		buzzer_key();
-		user->offset += fb_copy_string(user->offset,
-					current->sibling_next->name);
-		fb_scan(fb_info, 64, 1);
-		fb_info->offset += MATRIXS_COLUMNS;
+		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
+				current->sibling_next->name);
+		fb_info->offset = fb_scan(fb_info, 64, 1);
 		current = current->sibling_next;
 		break;
 	case KEY_LEFT | KEY_RIGHT:
@@ -427,9 +415,9 @@ static bool interface_switching(struct user_data pdata *user, char key)
 			break;
 		buzzer_enter();
 		current = current->child;
-		user->offset += fb_copy_string(user->offset, current->name);
-		fb_scan(fb_info, 64, 1);
-		fb_info->offset += MATRIXS_COLUMNS;
+		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
+				current->name);
+		fb_info->offset = fb_scan(fb_info, 64, 1);
 		break;
 	case KEY_LEFT | KEY_ENTER:
 		/* special for root menu and enter the setup time menu */

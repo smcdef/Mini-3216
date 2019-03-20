@@ -212,8 +212,10 @@ static void fb_load_times(void *priv)
 			/**
 			 * Re-check under disable irq.
 			 */
-			if (!should_show_temperature(user))
+			if (!should_show_temperature(user)) {
+				local_irq_enable();
 				return;
+			}
 			brightness = fb_info->brightness;
 			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);

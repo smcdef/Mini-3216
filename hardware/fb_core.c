@@ -14,7 +14,7 @@
  * +--------------+---------------+---------------+---------------+
  */
 
-#if FB_SIZE > 0xff
+#if FB_SIZE > 128
 #define MEMORY_TYPE		xdata
 #else
 #define MEMORY_TYPE		pdata
@@ -277,8 +277,10 @@ unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 unsigned int fb_set(unsigned int offset, char c, unsigned int width)
 {
 	unsigned int ret = width;
-	const char arr[2] = { 0 };
+	char arr[2];
 
+	arr[0] = c;
+	arr[1] = c;
 	while (width--)
 		offset += fb_copy(offset, arr, 1);
 

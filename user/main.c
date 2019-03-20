@@ -472,8 +472,8 @@ void main(void)
 		if (current && current->operate)
 			current->operate(current->private);
 		/**
-		 * We really should disable local irq all tht time.
-		 * But we can not do this, because if we do than,
+		 * We really should disable local irq all the time.
+		 * But we can not do this, because if we do that,
 		 * the buzzer_chime() will work abnormal.
 		 */
 		if (user_data.night_mode)

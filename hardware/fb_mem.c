@@ -7,8 +7,9 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
 {
 	char code *encode;
 	bool first = true;
-	unsigned int start_column = 0, new_columns = 0, offset = 0;
+	unsigned int new_columns = 0, offset = 0;
 
+	fb_info->offset = 0;
 	while (*s) {
 		char width = search_encode(s, &encode);
 
@@ -22,27 +23,21 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
 		new_columns += width;
 		if (offset > FB_COLUMNS - MATRIXS_COLUMNS - CHARACTER_WIDTH &&
 		    !first) {
-			fb_info->offset = start_column;
-			fb_scan(fb_info, new_columns + MATRIXS_COLUMNS,
-				speed);
-			start_column += new_columns;
+			fb_info->offset = fb_scan(fb_info,
+						  new_columns + MATRIXS_COLUMNS,
+						  speed);
 			new_columns = 0;
 		} else if (first &&
 			   new_columns > FB_COLUMNS - CHARACTER_WIDTH) {
-			fb_info->offset = start_column;
-			fb_scan(fb_info, new_columns, speed);
-			start_column += new_columns - MATRIXS_COLUMNS;
+			fb_info->offset = fb_scan(fb_info, new_columns, speed);
 			new_columns = 0;
 			first = false;
 		}
 	}
+	if (!first)
+		new_columns += MATRIXS_COLUMNS;
 
-	fb_info->offset = start_column;
-	if (first)
-		new_columns -= MATRIXS_COLUMNS;
-	fb_scan(fb_info, new_columns + MATRIXS_COLUMNS, speed);
-
-	return start_column + new_columns;
+	return fb_scan(fb_info, new_columns, speed);
 }
 
 unsigned int fb_copy_string(unsigned int offset, const char *s)

@@ -43,7 +43,7 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
 unsigned int fb_copy_string(unsigned int offset, const char *s)
 {
 	char code *encode;
-	unsigned int n = 0;
+	unsigned int offset_old = offset;
 
 	while (*s) {
 		char width = search_encode(s, &encode);
@@ -55,8 +55,7 @@ unsigned int fb_copy_string(unsigned int offset, const char *s)
 		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
 		offset += fb_copy(offset, encode, width);
-		n += width;
 	}
 
-	return n;
+	return offset - offset_old;
 }

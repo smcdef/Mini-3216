@@ -1,3 +1,16 @@
+/**
+ * Core interface implementation for Mini3216.
+ *
+ * Copyright (c) 2019-2020  smcdef.
+ *
+ * Author: songmuchun <smcdef@163.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
 #include "fb_core.h"
 #include "fb_mem.h"
 #include "config.h"

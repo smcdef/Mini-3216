@@ -403,7 +403,8 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
 		else
-			fb_copy_string(fb_info->offset, current->name);
+			fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
+				       current->name);
 		fb_info->offset = fb_scan(fb_info, 64, 2);
 		break;
 	case KEY_LEFT:

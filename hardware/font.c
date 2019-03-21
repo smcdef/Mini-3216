@@ -309,7 +309,7 @@ static char search_ascii_encode(const char *index, char code **out)
 
 	/* binary search */
 	while (high >= low) {
-		char mid = (low + high) >> 1;
+		char mid = low + ((high - low) >> 1);
 
 		if (ascii_tables[mid].index[0] > *index)
 			high = mid - 1;

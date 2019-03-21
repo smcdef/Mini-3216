@@ -320,7 +320,7 @@ static char search_ascii_encode(const char *index, char code **out)
 			return ascii_tables[mid].width;
 		}
 	}
-	*out = (void *)sizeof(ascii_tables[0].index);
+	*out = (void code *)sizeof(ascii_tables[0].index);
 
 	return -1;
 }
@@ -342,7 +342,7 @@ static char search_character_encode(const char *index, char code **out)
 		*out = (*entry)->encode;
 		return CHARACTER_WIDTH;
 	}
-	*out = (void *)sizeof(character_tables[0].index);
+	*out = (void code *)sizeof(character_tables[0].index);
 
 	return -1;
 }

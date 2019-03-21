@@ -13,7 +13,7 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
 
 		/* skip invalid input */
 		if (width < 0) {
-			s += *encode;
+			s += (char)encode;
 			continue;
 		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;
@@ -38,7 +38,7 @@ unsigned int fb_copy_string(unsigned int offset, const char *s)
 
 		/* skip invalid input */
 		if (width < 0) {
-			s += *encode;
+			s += (char)encode;
 			continue;
 		}
 		s += width == CHARACTER_WIDTH ? ENCODE_INDEX_SIZE : 1;

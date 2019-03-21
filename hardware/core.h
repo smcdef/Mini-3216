@@ -32,7 +32,7 @@ typedef char bool;
  * position @h. For example
  * GENMASK(4, 1) gives us the 16bit vector 0x001e.
  */
-#define BITS_PER_INT		16
+#define BITS_PER_INT		(sizeof(int) << 3)
 #define GENMASK(h, l) \
 	(((~0U) - (1U << (l)) + 1) & (~0U >> (BITS_PER_INT - 1 - (h))))
 

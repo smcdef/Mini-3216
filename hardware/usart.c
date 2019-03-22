@@ -17,13 +17,11 @@
 void uart_init(void)
 {
 	SCON  = 0x50;
-	AUXR |= 0x40;
-	AUXR &= 0xFE;
-	TMOD &= 0x0F;
-	TL1   = 0x41;
-	TH1   = 0xFD;
-	ET1   = 0;
-	TR1   = 1;
+	AUXR |= 0x01;
+	AUXR |= 0x04;
+	T2L   = 0x41;
+	T2H   = 0xFD;
+	AUXR |= 0x10;
 	ES    = 0;
 }
 

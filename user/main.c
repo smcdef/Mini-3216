@@ -176,8 +176,10 @@ static void fb_load_times(void *priv)
 	if (should_chime(timekeeping) && !user->night_mode)
 		buzzer_chime();
 
-	if (force)
+	if (force) {
 		user->force_update = false;
+		is_temp = false;
+	}
 
 	sec_old = timekeeping->time.sec;
 	if (hour_old != timekeeping->time.hour || force) {

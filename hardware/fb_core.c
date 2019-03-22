@@ -124,7 +124,7 @@ void fb_off(void)
 	P0 = P2 = P3 = P4 = 0x00;
 }
 
-static void fb_show_column(struct fb_column_info *fb_column_info)
+static void fb_show_column(struct fb_column_info pdata *fb_column_info)
 {
 	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
 	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
@@ -153,7 +153,7 @@ static void fb_show_column(struct fb_column_info *fb_column_info)
 	}
 }
 
-static void fb_show_column_rotate(struct fb_column_info *fb_column_info)
+static void fb_show_column_rotate(struct fb_column_info pdata *fb_column_info)
 {
 	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
 	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
@@ -202,9 +202,9 @@ static void fb_show_column_rotate(struct fb_column_info *fb_column_info)
 void fb_show(struct fb_info *fb_info)
 {
 	unsigned char i;
-	struct fb_column_info fb_column_info;
+	struct fb_column_info pdata fb_column_info;
 	char MEMORY_TYPE *fb = frame_buffer;
-	void (code *show)(struct fb_column_info *fb_column_info);
+	void (code *show)(struct fb_column_info pdata *fb_column_info);
 
 	fb_info->offset &= FB_HALF_SIZE_MASK;
 	fb_column_info.fair = fb_info->fair;

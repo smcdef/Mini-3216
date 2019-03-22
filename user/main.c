@@ -109,7 +109,7 @@ static unsigned int fb_load_temperature(unsigned int offset)
 		' ', '-', ' ', 'c', '\0',
 	};
 	char integer, decimals;
-	char *p = str + 1;
+	char pdata *p = str + 1;
 
 	if (lm75_read_temperature(&integer, &decimals) &&
 	    ds3231_read_temperature(&integer, &decimals))

@@ -1,3 +1,16 @@
+/**
+ * Internal font API.
+ *
+ * Copyright (c) 2019-2020  smcdef.
+ *
+ * Author: songmuchun <smcdef@163.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
 #include "font.h"
 #include <string.h>
 
@@ -320,7 +333,7 @@ static char search_ascii_encode(const char *index, char code **out)
 			return ascii_tables[mid].width;
 		}
 	}
-	*out = (void *)sizeof(ascii_tables[0].index);
+	*out = (void code *)sizeof(ascii_tables[0].index);
 
 	return -1;
 }
@@ -345,7 +358,7 @@ static char search_character_encode(const char *index, char code **out)
 			return CHARACTER_WIDTH;
 		}
 	}
-	*out = (void *)sizeof(character_tables[0].index);
+	*out = (void code *)sizeof(character_tables[0].index);
 	return -1;
 }
 

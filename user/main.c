@@ -1,3 +1,16 @@
+/**
+ * Core interface implementation for Mini3216.
+ *
+ * Copyright (c) 2019-2020  smcdef.
+ *
+ * Author: songmuchun <smcdef@163.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
 #include "fb_core.h"
 #include "fb_mem.h"
 #include "config.h"
@@ -403,7 +416,8 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
 		else
-			fb_copy_string(fb_info->offset, current->name);
+			fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
+				       current->name);
 		fb_info->offset = fb_scan(fb_info, 64, 2);
 		break;
 	case KEY_LEFT:

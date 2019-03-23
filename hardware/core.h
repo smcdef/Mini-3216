@@ -1,3 +1,15 @@
+/**
+ * Core macro definition and others.
+ *
+ * Copyright (c) 2019-2020  smcdef.
+ *
+ * Author: songmuchun <smcdef@163.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
 #ifndef __CORE_H__
 #define __CORE_H__
 
@@ -32,7 +44,7 @@ typedef char bool;
  * position @h. For example
  * GENMASK(4, 1) gives us the 16bit vector 0x001e.
  */
-#define BITS_PER_INT		16
+#define BITS_PER_INT		(sizeof(int) << 3)
 #define GENMASK(h, l) \
 	(((~0U) - (1U << (l)) + 1) & (~0U >> (BITS_PER_INT - 1 - (h))))
 

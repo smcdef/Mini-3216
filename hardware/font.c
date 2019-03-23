@@ -327,35 +327,28 @@ static char search_ascii_encode(const char *index, char code **out)
 
 static char search_character_encode(const char *index, char code **out)
 {
-	struct character_code code *xdata *xdata entry;
-
-	for (entry = character_sort_entry;
-	     entry != character_sort_entry + ARRAY_SIZE(character_sort_entry);
-	     ++entry) {
-		if ((*entry)->index[0] != index[0] ||
-		    (*entry)->index[1] != index[1]
-#ifndef GB2312_ENCODE
-		    || (*entry)->index[2] != index[2]
-#endif
-			)
-			continue;
-		*out = (*entry)->encode;
-		return CHARACTER_WIDTH;
+	char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
+	while(high >= low)
+	{
+		char mid = low + ((high -low) >> 1);
+		int result = memcmp(index, character_sort_entry[mid]->index,
+			sizeof(character_sort_entry[mid]->index));
+		if (result > 0)
+		{
+			low = mid + 1;
+		} else if(result < 0)
+		{
+			high = mid - 1;
+		} else
+		{
+			*out = character_sort_entry[mid]->encode;
+			return CHARACTER_WIDTH;
+		}
 	}
 	*out = (void *)sizeof(character_tables[0].index);
-
 	return -1;
 }
 
-static char cmp_font_sort(const char xdata *a, const char xdata *b)
-{
-	struct character_code code *xdata *xdata x = a;
-	struct character_code code *xdata *xdata y = b;
-
-	return memcmp((*x)->index, (*y)->index, ENCODE_INDEX_SIZE);
-}
-
-/* FIXME: Prepare for binary binary search */
 void font_sort(void)
 {
 	struct character_code code *xdata encode = character_tables;
@@ -363,6 +356,23 @@ void font_sort(void)
 
 	while (encode != character_tables + ARRAY_SIZE(character_tables))
 		*entry++ = encode++;
+	int i,preIndex;
+	for(i = 1; i < ARRAY_SIZE(character_tables); i++)
+	{
+		preIndex = i -1;
+		struct character_code code *xdata current
+						= character_sort_entry[i];
+		while(preIndex >= 0 &&
+		memcmp(character_sort_entry[prIndex]->index, current->index,
+			sizeof(character_sort_entry[0]->index)) > 0)
+		{
+			character_sort_entry[preIndex + 1] =
+				character_sort_entry[preIndex];
+			--preIndex;
+		}
+		character_sort_entry[preIndex + 1] = current;
+	}
+
 }
 
 char search_encode(const char *index, char code **out)

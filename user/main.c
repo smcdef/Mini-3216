@@ -109,7 +109,7 @@ static unsigned int fb_load_temperature(unsigned int offset)
 		' ', '-', ' ', 'c', '\0',
 	};
 	char integer, decimals;
-	char *p = str + 1;
+	char pdata *p = str + 1;
 
 	if (lm75_read_temperature(&integer, &decimals) &&
 	    ds3231_read_temperature(&integer, &decimals))
@@ -176,8 +176,10 @@ static void fb_load_times(void *priv)
 	if (should_chime(timekeeping) && !user->night_mode)
 		buzzer_chime();
 
-	if (force)
+	if (force) {
 		user->force_update = false;
+		is_temp = false;
+	}
 
 	sec_old = timekeeping->time.sec;
 	if (hour_old != timekeeping->time.hour || force) {
@@ -537,6 +539,14 @@ void timer0_isr() interrupt 1 using 2
 	}
 }
 
+#ifdef CONFIG_PRES_PULL_UP
+#define NIGHT_MODE_ADC_VALUE		0x70
+#define BRIGHT_MODE_ADC_VALUE		0x40
+#else
+#define NIGHT_MODE_ADC_VALUE		0xf0
+#define BRIGHT_MODE_ADC_VALUE		0xc8
+#endif
+
 /* ADC interrupt routine */
 void adc_isr(void) interrupt 5 using 1
 {
@@ -544,11 +554,11 @@ void adc_isr(void) interrupt 5 using 1
 
 	ADC_CONTR &= ~ADC_FLAG;
 	result = ADC_RES;
-	if (result > 0xf0 && !user_data.night_mode) {
+	if (result > NIGHT_MODE_ADC_VALUE && !user_data.night_mode) {
 		user_data.night_mode = true;
 		user_data.fb_info.fair = NIGHT_MODE_FAIR_FACTOR;
 		user_data.fb_info.brightness = NIGHT_MODE_BRIGHTNESS;
-	} else if (result < 0xc8 && user_data.night_mode) {
+	} else if (result < BRIGHT_MODE_ADC_VALUE && user_data.night_mode) {
 		user_data.night_mode = false;
 		user_data.fb_info.brightness = user_data.settings.brightness;
 		user_data.fb_info.fair = false;

@@ -126,6 +126,7 @@ void fb_off(void)
 }
 
 #ifdef CONFIG_MATRIXS_TEST
+#define MATRIXS_FB_SIZE		(MATRIXS_COLUMNS << 1)
 void fb_matrixs_test(void)
 {
 	unsigned char i, j, k;
@@ -133,17 +134,19 @@ void fb_matrixs_test(void)
 	struct fb_info fb_info;
 
 	memset(&fb_info, 0, sizeof(fb_info));
-	fb_info.brightness = 100;
 	fb_set(0, 0, 32);
+	fb_info.brightness = 50;
 
-	for (i = 0; i < MATRIXS_COLUMNS << 1; ++i) {
+	for (i = 0; i < MATRIXS_FB_SIZE; ++i, ++fb) {
 		for (j = 0; j < MATRIX_COLUMNS; ++j) {
-			*fb = 1 << j;
-			for (k = 0; k < 50; ++k)
+			*fb |= 1 << j;
+			for (k = 0; k < ((MATRIXS_FB_SIZE - i) >> 2) + 5; ++k)
 				fb_show(&fb_info);
 		}
-		*fb++ = 0;
 	}
+
+	for (i = 0; i < 50; ++i)
+		fb_show(&fb_info);
 }
 #else
 void fb_matrixs_test(void)

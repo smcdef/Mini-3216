@@ -1,3 +1,16 @@
+/**
+ * Internal font API.
+ *
+ * Copyright (c) 2019-2020  smcdef.
+ *
+ * Author: songmuchun <smcdef@163.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ */
+
 #include "font.h"
 #include <string.h>
 
@@ -320,7 +333,7 @@ static char search_ascii_encode(const char *index, char code **out)
 			return ascii_tables[mid].width;
 		}
 	}
-	*out = (void *)sizeof(ascii_tables[0].index);
+	*out = (void code *)sizeof(ascii_tables[0].index);
 
 	return -1;
 }
@@ -328,51 +341,47 @@ static char search_ascii_encode(const char *index, char code **out)
 static char search_character_encode(const char *index, char code **out)
 {
 	char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
-	while(high >= low)
-	{
+
+	while(high >= low) {
 		char mid = low + ((high -low) >> 1);
 		int result = memcmp(index, character_sort_entry[mid]->index,
-			sizeof(character_sort_entry[mid]->index));
-		if (result > 0)
-		{
+				    sizeof(character_sort_entry[mid]->index));
+
+		if (result > 0) {
 			low = mid + 1;
-		} else if(result < 0)
-		{
+		} else if(result < 0) {
 			high = mid - 1;
-		} else
-		{
+		} else {
 			*out = character_sort_entry[mid]->encode;
 			return CHARACTER_WIDTH;
 		}
 	}
-	*out = (void *)sizeof(character_tables[0].index);
+	*out = (void code *)sizeof(character_tables[0].index);
+
 	return -1;
 }
 
 void font_sort(void)
 {
-	struct character_code code *xdata encode = character_tables;
-	struct character_code code *xdata *xdata entry = character_sort_entry;
+	int i, j;
+	struct character_code code *encode = character_tables;
+	struct character_code code *xdata *entry = character_sort_entry;
 
 	while (encode != character_tables + ARRAY_SIZE(character_tables))
 		*entry++ = encode++;
-	int i,preIndex;
-	for(i = 1; i < ARRAY_SIZE(character_tables); i++)
-	{
-		preIndex = i -1;
-		struct character_code code *xdata current
-						= character_sort_entry[i];
-		while(preIndex >= 0 &&
-		memcmp(character_sort_entry[prIndex]->index, current->index,
-			sizeof(character_sort_entry[0]->index)) > 0)
-		{
-			character_sort_entry[preIndex + 1] =
-				character_sort_entry[preIndex];
-			--preIndex;
-		}
-		character_sort_entry[preIndex + 1] = current;
-	}
 
+	for(i = 1; i < ARRAY_SIZE(character_tables); i++) {
+		struct character_code code *current = character_sort_entry[i];
+
+		j = i -1;
+		while(j >= 0 &&
+		      memcmp(character_sort_entry[j]->index, current->index,
+			     sizeof(character_sort_entry[0]->index)) > 0) {
+			character_sort_entry[j + 1] = character_sort_entry[j];
+			--j;
+		}
+		character_sort_entry[j + 1] = current;
+	}
 }
 
 char search_encode(const char *index, char code **out)

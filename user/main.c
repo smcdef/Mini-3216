@@ -492,6 +492,8 @@ void main(void)
 
 	user_data_init();
 	buzzer_power_on();
+	fb_off();
+	fb_matrixs_test();
 	uart_init();
 	touch_key_init();
 	fb_set(0, 0, 64);

@@ -12,6 +12,7 @@
  */
 
 #include "fb_core.h"
+#include <string.h>
 
 /**
  * +--------------+---------------+---------------+---------------+
@@ -123,6 +124,32 @@ void fb_off(void)
 	P0M0 = P2M0 = P3M0 = P4M0 = 0x00;
 	P0 = P2 = P3 = P4 = 0x00;
 }
+
+#ifdef CONFIG_MATRIXS_TEST
+void fb_matrixs_test(void)
+{
+	unsigned char i, j, k;
+	char MEMORY_TYPE *fb = frame_buffer;
+	struct fb_info fb_info;
+
+	memset(&fb_info, 0, sizeof(fb_info));
+	fb_info.brightness = 100;
+	fb_set(0, 0, 32);
+
+	for (i = 0; i < MATRIXS_COLUMNS << 1; ++i) {
+		for (j = 0; j < MATRIX_COLUMNS; ++j) {
+			*fb = 1 << j;
+			for (k = 0; k < 50; ++k)
+				fb_show(&fb_info);
+		}
+		*fb++ = 0;
+	}
+}
+#else
+void fb_matrixs_test(void)
+{
+}
+#endif
 
 static void fb_show_column(struct fb_column_info pdata *fb_column_info)
 {

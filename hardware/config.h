@@ -24,6 +24,7 @@
 #define CONFIG_DS3231_INT
 #define CONFIG_BS813A
 #define CONFIG_PRES_PULL_UP
+/* #define CONFIG_MATRIXS_TEST */
 
 #if CONFIG_FB_SIZE_SHIFT < 7
 #error "CONFIG_FB_SIZE_SHIFT should greater than or equal to 7"

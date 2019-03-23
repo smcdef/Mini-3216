@@ -177,6 +177,7 @@ static void fb_load_times(void *priv)
 		buzzer_chime();
 
 	if (force) {
+		fb_info->offset = 0;
 		user->force_update = false;
 		is_temp = false;
 	}
@@ -410,7 +411,6 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		buzzer_enter();
 		current = current->child;
 		if (is_root_menu(current)) {
-			fb_info->offset = 0;
 			user->force_update = true;
 			break;
 		}

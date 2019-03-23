@@ -33,7 +33,8 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
 		offset += fb_copy(offset, encode, width);
 		new_columns += width;
 		if (new_columns > FB_COLUMNS - CHARACTER_WIDTH) {
-			fb_info->offset = fb_scan(fb_info, new_columns, speed);
+			fb_info->offset = fb_scan(fb_info, new_columns - 1,
+						  speed) + 1;
 			new_columns = MATRIXS_COLUMNS;
 		}
 	}

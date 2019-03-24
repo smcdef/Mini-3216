@@ -343,7 +343,7 @@ static char search_character_encode(const char *index, char code **out)
 	unsigned char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
 
 	while (high >= low) {
-		unsigned char mid = low + ((high -low) >> 1);
+		unsigned char mid = low + ((high - low) >> 1);
 		char result = memcmp(index, character_sort_entry[mid]->index,
 				     sizeof(character_sort_entry[0]->index));
 

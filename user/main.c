@@ -318,12 +318,12 @@ static bool set_time_common(struct set_time_env idata *env)
 
 	switch (env->key) {
 	case KEY_RIGHT:
-		if (++value == env->max + 1)
+		if (++value > env->max)
 			value = env->min;
 		key_delay(fb_info);
 		break;
 	case KEY_LEFT:
-		if (--value == -1)
+		if (--value < env->min)
 			value = env->max;
 		key_delay(fb_info);
 		break;

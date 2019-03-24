@@ -517,21 +517,22 @@ void main(void)
 		}
 		if (current && current->operate)
 			current->operate(current->private);
+
 		/**
-		 * We really should disable local irq all the time.
-		 * But we can not do this, because if we do that,
-		 * the buzzer_chime() will work abnormal.
-		 */
-		if (user_data.night_mode)
-			local_irq_disable();
+		* We should disable local irq when call fb_show().
+		* But we can not do this, because if we do that,
+		* the buzzer_chime() will work abnormal. And now
+		* we can do that. Because timer0 is not able to
+		* mask interrupts via EA = 0.
+		*/
+		local_irq_disable();
 		fb_show(fb_info);
-		if (user_data.night_mode)
-			local_irq_enable();
+		local_irq_enable();
 	}
 }
 
-/* Timer0 interrupt routine */
-void timer0_isr() interrupt 1 using 2
+/* Timer1 interrupt routine */
+void timer1_isr() interrupt 3 using 2
 {
 	static char adc_cnt = 0;
 

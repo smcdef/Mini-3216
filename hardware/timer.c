@@ -10,26 +10,27 @@
 
 #include "timer.h"
 
-/* 10ms@27.000MHz */
+/* 100us@27.000MHz */
 void timer0_init(void)
 {
 	AUXR &= 0x7F;
 	TMOD &= 0xF0;
-	TL0   = 0x1C;
-	TH0   = 0xA8;
+	TMOD |= GENMASK(1, 0);
+	TL0   = 0x1F;
+	TH0   = 0xFF;
 	TF0   = 0;
-	TR0   = 1;
 	ET0   = 1;
+	TR0   = 0;
 }
 
-/* 100us@27.000MHz */
+/* 10ms@27.000MHz */
 void timer1_init(void)
 {
 	AUXR &= 0xBF;
 	TMOD &= 0x0F;
-	TL1   = 0x1F;
-	TH1   = 0xFF;
+	TL1   = 0x1C;
+	TH1   = 0xA8;
 	TF1   = 0;
 	ET1   = 1;
-	TR1   = 0;
+	TR1   = 1;
 }

@@ -531,15 +531,16 @@ void main(void)
 	}
 }
 
-/* Timer1 interrupt routine */
+/* Timer1 interrupt routine(10ms) */
 void timer1_isr() interrupt 3 using 2
 {
-	static char adc_cnt = 0;
+	static unsigned char timer_count = 0;
 
-	if (++adc_cnt == 20) {
+	/* every 320ms */
+	if (timer_count % 32 == 0)
 		adc_start(ADC_CHANNEL);
-		adc_cnt = 0;
-	}
+
+	timer_count++;
 }
 
 #ifdef CONFIG_PRES_PULL_UP

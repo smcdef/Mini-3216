@@ -127,6 +127,7 @@ void fb_off(void)
 
 #ifdef CONFIG_MATRIXS_TEST
 #define MATRIXS_FB_SIZE		(MATRIXS_COLUMNS << 1)
+
 void fb_matrixs_test(void)
 {
 	unsigned char i, j, k;

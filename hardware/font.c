@@ -342,14 +342,14 @@ static char search_character_encode(const char *index, char code **out)
 {
 	char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
 
-	while(high >= low) {
+	while (high >= low) {
 		char mid = low + ((high -low) >> 1);
 		int result = memcmp(index, character_sort_entry[mid]->index,
 				    sizeof(character_sort_entry[mid]->index));
 
 		if (result > 0) {
 			low = mid + 1;
-		} else if(result < 0) {
+		} else if (result < 0) {
 			high = mid - 1;
 		} else {
 			*out = character_sort_entry[mid]->encode;
@@ -370,13 +370,13 @@ void font_sort(void)
 	while (encode != character_tables + ARRAY_SIZE(character_tables))
 		*entry++ = encode++;
 
-	for(i = 1; i < ARRAY_SIZE(character_tables); i++) {
+	for (i = 1; i < ARRAY_SIZE(character_tables); i++) {
 		struct character_code code *current = character_sort_entry[i];
 
-		j = i -1;
-		while(j >= 0 &&
-		      memcmp(character_sort_entry[j]->index, current->index,
-			     sizeof(character_sort_entry[0]->index)) > 0) {
+		j = i - 1;
+		while (j >= 0 &&
+		       memcmp(character_sort_entry[j]->index, current->index,
+			      sizeof(character_sort_entry[0]->index)) > 0) {
 			character_sort_entry[j + 1] = character_sort_entry[j];
 			--j;
 		}

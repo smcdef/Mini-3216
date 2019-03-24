@@ -368,7 +368,7 @@ static void set_minute(void *priv)
 
 static bool is_root_menu(struct menu xdata *entry)
 {
-	return !strcmp(entry->name, ROOT_MENU_NAME);
+	return entry->name && !strcmp(entry->name, ROOT_MENU_NAME);
 }
 
 static void menu_init(void)

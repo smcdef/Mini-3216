@@ -340,12 +340,12 @@ static char search_ascii_encode(const char *index, char code **out)
 
 static char search_character_encode(const char *index, char code **out)
 {
-	char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
+	unsigned char low = 0, high = ARRAY_SIZE(character_sort_entry) - 1;
 
 	while (high >= low) {
-		char mid = low + ((high -low) >> 1);
-		int result = memcmp(index, character_sort_entry[mid]->index,
-				    sizeof(character_sort_entry[mid]->index));
+		unsigned char mid = low + ((high -low) >> 1);
+		char result = memcmp(index, character_sort_entry[mid]->index,
+				     sizeof(character_sort_entry[0]->index));
 
 		if (result > 0) {
 			low = mid + 1;

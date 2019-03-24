@@ -36,6 +36,15 @@
 
 sbit is_rotate = P1 ^ 0;
 
+struct set_time_env {
+	char key;
+	char max;
+	char min;
+	enum set_type type;
+	const char *name;
+	struct fb_info idata *fb_info;
+};
+
 struct menu {
 	const char *name;
 	struct menu xdata *child;
@@ -297,68 +306,67 @@ static void key_delay(struct fb_info *fb_info)
 		fb_show(fb_info);
 }
 
-#define HOUR_MAX		24
-#define MINUTE_MAX		60
-
-static void set_hour(void *priv)
+static bool set_time_common(struct set_time_env idata *env)
 {
 	char value;
-	struct user_data idata *user = priv;
-	struct fb_info idata *fb_info = &user->fb_info;
-	char key = user->key;
+	enum set_type type = env->type;
+	struct fb_info idata *fb_info = env->fb_info;
 
-	if (ds3231_read_time(SET_HOUR, &value))
-		return;
+	if (ds3231_read_time(type, &value))
+		return false;
 	value = value / 16 * 10 + value % 16;
 
-	switch (key) {
+	switch (env->key) {
 	case KEY_RIGHT:
-		if (++value == HOUR_MAX)
-			value = 0;
+		if (++value == env->max + 1)
+			value = env->min;
 		key_delay(fb_info);
 		break;
 	case KEY_LEFT:
 		if (--value == -1)
-			value = HOUR_MAX - 1;
+			value = env->max;
 		key_delay(fb_info);
 		break;
 	default:
-		return;
+		return false;
 	}
 
-	ds3231_set_time(SET_HOUR, value / 10 * 16 + value % 10);
-	fb_load_hour(fb_info->offset);
+	ds3231_set_time(type, value / 10 * 16 + value % 10);
+	fb_load_time(fb_info->offset, type, env->name);
+
+	return true;
+}
+
+static void set_hour(void *priv)
+{
+	struct user_data idata *user = priv;
+	struct set_time_env idata env;
+
+	env.key		= user->key;
+	env.max		= 23;
+	env.min		= 0;
+	env.type	= SET_HOUR;
+	env.name	= "时";
+	env.fb_info	= &user->fb_info;
+
+	set_time_common(&env);
 }
 
 static void set_minute(void *priv)
 {
-	char value;
 	struct user_data idata *user = priv;
-	struct fb_info idata *fb_info = &user->fb_info;
-	char key = user->key;
+	struct set_time_env idata env;
 
-	if (ds3231_read_time(SET_MINUTES, &value))
+	env.key		= user->key;
+	env.max		= 59;
+	env.min		= 0;
+	env.type	= SET_MINUTES;
+	env.name	= "分";
+	env.fb_info	= &user->fb_info;
+
+	if (!set_time_common(&env))
 		return;
-	value = value / 16 * 10 + value % 16;
-
-	switch (key) {
-	case KEY_RIGHT:
-		if (++value == MINUTE_MAX)
-			value = 0;
-		key_delay(fb_info);
-		break;
-	case KEY_LEFT:
-		if (--value == -1)
-			value = MINUTE_MAX - 1;
-		key_delay(fb_info);
-		break;
-	default:
-		return;
-	}
-
-	ds3231_set_time(SET_MINUTES, value / 10 * 16 + value % 10);
 	ds3231_set_time(SET_SECOND, 0);
-	fb_load_minute(fb_info->offset);
 }
 
 #define ROOT_MENU_NAME		"root"

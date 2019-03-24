@@ -254,7 +254,7 @@ void fb_show(struct fb_info *fb_info)
 }
 
 /**
- * @n should range [32, FB_SIZE / 2]
+ * @n should range [MATRIXS_COLUMNS, FB_SIZE / 2]
  */
 unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 		     unsigned char speed)
@@ -262,7 +262,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
-	if (n > FB_SIZE / 2 || n < 32)
+	if (n > FB_SIZE / 2 || n < MATRIXS_COLUMNS)
 		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
@@ -276,7 +276,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 }
 
 /**
- * @n should range [32, FB_SIZE / 2]
+ * @n should range [MATRIXS_COLUMNS, FB_SIZE / 2]
  */
 unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 			     unsigned char speed)
@@ -284,7 +284,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
-	if (n > FB_SIZE / 2 || n < 32)
+	if (n > FB_SIZE / 2 || n < MATRIXS_COLUMNS)
 		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {

@@ -104,10 +104,7 @@ static void local_irq_enable(void)
 
 static unsigned int fb_load_temperature(unsigned int offset)
 {
-	char idata str[] = {
-		' ', '-', ' ', '-', ' ', '.',
-		' ', '-', ' ', 'c', '\0',
-	};
+	char idata str[] = " - - . - c";
 	char integer, decimals;
 	char idata *p = str + 1;
 
@@ -268,13 +265,13 @@ static unsigned int fb_load_time(unsigned int offset, enum set_type type,
 {
 	char value;
 	unsigned int offset_old = offset;
-	char idata str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
+	char idata str[] = "  - - ";
 
 	if (ds3231_read_time(type, &value))
 		return 0;
 
-	str[1] = value / 16 + '0';
-	str[3] = value % 16 + '0';
+	str[2] = value / 16 + '0';
+	str[4] = value % 16 + '0';
 	offset += fb_copy_string(offset, str);
 	offset += fb_copy_string(offset, s);
 

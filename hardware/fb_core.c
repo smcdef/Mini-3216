@@ -31,7 +31,7 @@
 #if FB_SIZE > 128
 #define MEMORY_TYPE		xdata
 #else
-#define MEMORY_TYPE		pdata
+#define MEMORY_TYPE		idata
 #endif
 
 #define FB_HALF_SIZE_MASK	(sizeof(frame_buffer) / 2 - 1)

@@ -65,7 +65,7 @@ static struct menu xdata set_hour_menu;
 static struct menu xdata set_minute_menu;
 static struct menu xdata *current;
 
-static struct user_data pdata user_data;
+static struct user_data idata user_data;
 
 static void user_data_init(void)
 {
@@ -104,12 +104,12 @@ static void local_irq_enable(void)
 
 static unsigned int fb_load_temperature(unsigned int offset)
 {
-	char pdata str[] = {
+	char idata str[] = {
 		' ', '-', ' ', '-', ' ', '.',
 		' ', '-', ' ', 'c', '\0',
 	};
 	char integer, decimals;
-	char pdata *p = str + 1;
+	char idata *p = str + 1;
 
 	if (lm75_read_temperature(&integer, &decimals) &&
 	    ds3231_read_temperature(&integer, &decimals))
@@ -136,7 +136,7 @@ err:
 	return fb_copy_string(offset, p);
 }
 
-static bool should_show_temperature(struct user_data pdata *user)
+static bool should_show_temperature(struct user_data idata *user)
 {
 	return !user->night_mode;
 }
@@ -150,12 +150,12 @@ static bool should_chime(union timekeeping *timekeeping)
 
 static void fb_load_times(void *priv)
 {
-	static pdata char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
-	pdata struct user_data *user = priv;
-	pdata union timekeeping *timekeeping = &user->timekeeping;
-	pdata struct fb_info *fb_info = &user->fb_info;
+	static char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
+	struct user_data idata *user = priv;
+	union timekeeping idata *timekeeping = &user->timekeeping;
+	struct fb_info idata *fb_info = &user->fb_info;
 	bool force = user->force_update;
-	char pdata str[5];
+	char idata str[5];
 	char half_low;
 	static bool is_temp = false;
 	unsigned int offset = 0;
@@ -268,7 +268,7 @@ static unsigned int fb_load_time(unsigned int offset, enum set_type type,
 {
 	char value;
 	unsigned int offset_old = offset;
-	char pdata str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
+	char idata str[] = { ' ', '-', ' ', '-', ' ', ' ', '\0', };
 
 	if (ds3231_read_time(type, &value))
 		return 0;
@@ -306,8 +306,8 @@ static void key_delay(struct fb_info *fb_info)
 static void set_hour(void *priv)
 {
 	char value;
-	pdata struct user_data *user = priv;
-	pdata struct fb_info *fb_info = &user->fb_info;
+	struct user_data idata *user = priv;
+	struct fb_info idata *fb_info = &user->fb_info;
 	char key = user->key;
 
 	if (ds3231_read_time(SET_HOUR, &value))
@@ -336,8 +336,8 @@ static void set_hour(void *priv)
 static void set_minute(void *priv)
 {
 	char value;
-	pdata struct user_data *user = priv;
-	pdata struct fb_info *fb_info = &user->fb_info;
+	struct user_data idata *user = priv;
+	struct fb_info idata *fb_info = &user->fb_info;
 	char key = user->key;
 
 	if (ds3231_read_time(SET_MINUTES, &value))
@@ -394,9 +394,9 @@ static void menu_init(void)
 	current = &root_menu;
 }
 
-static bool interface_switching(struct user_data pdata *user, char key)
+static bool interface_switching(struct user_data idata *user, char key)
 {
-	struct fb_info pdata *fb_info = &user->fb_info;
+	struct fb_info idata *fb_info = &user->fb_info;
 	struct menu xdata *current_old = current;
 	bool success = false;
 #if CONFIG_FB_SIZE > 128
@@ -420,7 +420,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 		else
 			fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				       current->name);
-		fb_info->offset = fb_scan(fb_info, 64, 2);
+		fb_info->offset = fb_scan(fb_info, 64, 1);
 		break;
 	case KEY_LEFT:
 		if (!current->sibling_prev)
@@ -488,7 +488,7 @@ static bool interface_switching(struct user_data pdata *user, char key)
 
 void main(void)
 {
-	struct fb_info pdata *fb_info = &user_data.fb_info;
+	struct fb_info idata *fb_info = &user_data.fb_info;
 
 	user_data_init();
 	buzzer_power_on();

@@ -28,15 +28,15 @@
  * +--------------+---------------+---------------+---------------+
  */
 
-#if FB_SIZE > 128
-#define MEMORY_TYPE		xdata
+#if FB_SIZE > 256
+#define FB_MEMORY_TYPE		xdata
 #else
-#define MEMORY_TYPE		idata
+#define FB_MEMORY_TYPE		pdata
 #endif
 
 #define FB_HALF_SIZE_MASK	(sizeof(frame_buffer) / 2 - 1)
 
-static char MEMORY_TYPE frame_buffer[FB_SIZE];
+static char FB_MEMORY_TYPE frame_buffer[FB_SIZE];
 
 struct fb_column_info {
 	char column;
@@ -131,7 +131,7 @@ void fb_off(void)
 void fb_matrixs_test(void)
 {
 	unsigned char i, j, k;
-	char MEMORY_TYPE *fb = frame_buffer;
+	char FB_MEMORY_TYPE *fb = frame_buffer;
 	struct fb_info fb_info;
 
 	memset(&fb_info, 0, sizeof(fb_info));
@@ -155,7 +155,7 @@ void fb_matrixs_test(void)
 }
 #endif
 
-static void fb_show_column(struct fb_column_info pdata *fb_column_info)
+static void fb_show_column(struct fb_column_info idata *fb_column_info)
 {
 	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
 	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
@@ -184,7 +184,7 @@ static void fb_show_column(struct fb_column_info pdata *fb_column_info)
 	}
 }
 
-static void fb_show_column_rotate(struct fb_column_info pdata *fb_column_info)
+static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
 {
 	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
 	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
@@ -233,9 +233,9 @@ static void fb_show_column_rotate(struct fb_column_info pdata *fb_column_info)
 void fb_show(struct fb_info *fb_info)
 {
 	unsigned char i;
-	struct fb_column_info pdata fb_column_info;
-	char MEMORY_TYPE *fb = frame_buffer;
-	void (code *show)(struct fb_column_info pdata *fb_column_info);
+	struct fb_column_info idata fb_column_info;
+	char FB_MEMORY_TYPE *fb = frame_buffer;
+	void (code *show)(struct fb_column_info idata *fb_column_info);
 
 	fb_info->offset &= FB_HALF_SIZE_MASK;
 	fb_column_info.fair = fb_info->fair;
@@ -302,7 +302,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
  */
 unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 {
-	char MEMORY_TYPE *fb = frame_buffer;
+	char FB_MEMORY_TYPE *fb = frame_buffer;
 	unsigned int ret = width;
 
 	offset &= FB_HALF_SIZE_MASK;

@@ -56,3 +56,8 @@
 
 1. 单片机使用的是STC15F2K60S2，使用内部晶振
 2. 下载时，晶振频率请选择27MHz
+3. 初次构建Keil工程后，请如下设置。
+- 快捷键**Alt+F7**进入Options for Target ‘Target 1’设置界面。
+- 点击**Device**选项框，勾选**Use Extended Linker(LX51) instead of BL51**。
+- 点击**LX51 Misc**选项框，在Misc controls输入栏填写**REMOVEUNUSED**。
+- 点击**OK**，设置完成。

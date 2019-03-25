@@ -541,8 +541,8 @@ void timer1_isr() interrupt 3 using 2
 {
 	static unsigned char timer_count = 0;
 
-	/* every 320ms */
-	if (timer_count % 32 == 0)
+	/* every 1280ms */
+	if (timer_count % 128 == 0)
 		adc_start(ADC_CHANNEL);
 
 	timer_count++;

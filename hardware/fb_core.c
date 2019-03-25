@@ -162,7 +162,7 @@ static void fb_show_column(struct fb_column_info idata *fb_column_info)
 	unsigned char brightness = fb_column_info->brightness;
 	unsigned char fair = fb_column_info->fair;
 
-	switch(index) {
+	switch (index) {
 	case 0:
 		matrix0_disp(offset, fb_column_info->byte_h, brightness, fair);
 		matrix1_disp(offset, fb_column_info->byte_l, brightness, fair);
@@ -191,7 +191,7 @@ static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
 	unsigned char brightness = fb_column_info->brightness;
 	unsigned char fair = fb_column_info->fair;
 
-	switch(index) {
+	switch (index) {
 	case 0:
 		matrix7_disp_rotate(offset, fb_column_info->byte_h,
 				    brightness, fair);

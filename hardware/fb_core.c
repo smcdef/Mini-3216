@@ -162,7 +162,7 @@ static void fb_show_column(struct fb_column_info idata *fb_column_info)
 	unsigned char brightness = fb_column_info->brightness;
 	unsigned char fair = fb_column_info->fair;
 
-	switch(index) {
+	switch (index) {
 	case 0:
 		matrix0_disp(offset, fb_column_info->byte_h, brightness, fair);
 		matrix1_disp(offset, fb_column_info->byte_l, brightness, fair);
@@ -191,7 +191,7 @@ static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
 	unsigned char brightness = fb_column_info->brightness;
 	unsigned char fair = fb_column_info->fair;
 
-	switch(index) {
+	switch (index) {
 	case 0:
 		matrix7_disp_rotate(offset, fb_column_info->byte_h,
 				    brightness, fair);
@@ -254,7 +254,7 @@ void fb_show(struct fb_info *fb_info)
 }
 
 /**
- * @n should range [MATRIXS_COLUMNS, FB_SIZE / 2]
+ * @n should range [MATRIXS_COLUMNS, FB_COLUMNS]
  */
 unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 		     unsigned char speed)
@@ -262,7 +262,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
-	if (n > FB_SIZE / 2 || n < MATRIXS_COLUMNS)
+	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
 		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
@@ -276,7 +276,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 }
 
 /**
- * @n should range [MATRIXS_COLUMNS, FB_SIZE / 2]
+ * @n should range [MATRIXS_COLUMNS, FB_COLUMNS]
  */
 unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 			     unsigned char speed)
@@ -284,7 +284,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
-	if (n > FB_SIZE / 2 || n < MATRIXS_COLUMNS)
+	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
 		return offset;
 
 	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {

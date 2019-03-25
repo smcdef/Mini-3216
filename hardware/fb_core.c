@@ -298,7 +298,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 }
 
 /**
- * @offset + @width should range [0, FB_SIZE / 2].
+ * @width should range [0, FB_COLUMNS].
  */
 unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 {

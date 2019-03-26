@@ -67,20 +67,20 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port0##M1 &= ~(1 << column);				\
+		port1##M1 &= ~(1 << column);				\
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
 			if (dat & mask) {				\
-				DRIVER_ONE_LED(mask, port1, brightness);\
+				DRIVER_ONE_LED(mask, port0, brightness);\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port0##M1 = 0xff;					\
 		port1##M1 = 0xff;					\
-		port1##M0 = 0x00;					\
+		port0##M1 = 0xff;					\
+		port0##M0 = 0x00;					\
 	}								\
 									\
 	static void matrix##n##_disp_rotate(char column, char dat, 	\
@@ -89,34 +89,34 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port0##M1 &= ~(1 << (7 - column));			\
+		port1##M1 &= ~(1 << (7 - column));			\
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
 			if (dat & mask) {				\
-				DRIVER_ONE_LED(1 << (7 - i), port1,	\
+				DRIVER_ONE_LED(1 << (7 - i), port0,	\
 					       brightness);		\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port0##M1 = 0xff;					\
 		port1##M1 = 0xff;					\
-		port1##M0 = 0x00;					\
+		port0##M1 = 0xff;					\
+		port0##M0 = 0x00;					\
 	}								\
 									\
 /* Just for macro definition ends with a semicolon for Keil C51 */	\
 static xdata char __dummy_##n##_unused__
 
-DECLARE_MATRIX_DISP(0, P3, P0);
-DECLARE_MATRIX_DISP(1, P3, P2);
-DECLARE_MATRIX_DISP(2, P4, P0);
-DECLARE_MATRIX_DISP(3, P4, P2);
-DECLARE_MATRIX_DISP(4, P0, P3);
-DECLARE_MATRIX_DISP(5, P0, P4);
-DECLARE_MATRIX_DISP(6, P2, P3);
-DECLARE_MATRIX_DISP(7, P2, P4);
+DECLARE_MATRIX_DISP(0, P0, P3);
+DECLARE_MATRIX_DISP(1, P2, P3);
+DECLARE_MATRIX_DISP(2, P0, P4);
+DECLARE_MATRIX_DISP(3, P2, P4);
+DECLARE_MATRIX_DISP(4, P3, P0);
+DECLARE_MATRIX_DISP(5, P4, P0);
+DECLARE_MATRIX_DISP(6, P3, P2);
+DECLARE_MATRIX_DISP(7, P4, P2);
 
 void fb_off(void)
 {

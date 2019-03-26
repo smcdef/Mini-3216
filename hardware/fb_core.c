@@ -53,11 +53,9 @@ static void led_on_delay(unsigned char i)
 
 #define DRIVER_ONE_LED(mask, port, brightness)				\
 	do {								\
-		port |= mask;						\
-		port##M1 = ~mask;					\
-		port##M0 = mask;					\
+		port##M1 = ~(mask);					\
 		led_on_delay(brightness);				\
-		port &= ~mask;						\
+		port##M1 = 0xff;					\
 	} while(0)
 
 #define DECLARE_MATRIX_DISP(n, port0, port1)				\
@@ -67,7 +65,7 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1##M1 &= ~(1 << column);				\
+		port1 = ~(1 << column);					\
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
@@ -78,9 +76,7 @@ static void led_on_delay(unsigned char i)
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port1##M1 = 0xff;					\
-		port0##M1 = 0xff;					\
-		port0##M0 = 0x00;					\
+		port1 = 0xff;						\
 	}								\
 									\
 	static void matrix##n##_disp_rotate(char column, char dat, 	\
@@ -89,7 +85,7 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1##M1 &= ~(1 << (7 - column));			\
+		port1 = ~(1 << (7 - column));				\
 		for (i = 0; i < 8; i++) {				\
 			char mask = 1 << i;				\
 									\
@@ -101,9 +97,7 @@ static void led_on_delay(unsigned char i)
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port1##M1 = 0xff;					\
-		port0##M1 = 0xff;					\
-		port0##M0 = 0x00;					\
+		port1 = 0xff;						\
 	}								\
 									\
 /* Just for macro definition ends with a semicolon for Keil C51 */	\
@@ -121,8 +115,8 @@ DECLARE_MATRIX_DISP(7, P4, P2);
 void fb_off(void)
 {
 	P0M1 = P2M1 = P3M1 = P4M1 = 0xff;
-	P0M0 = P2M0 = P3M0 = P4M0 = 0x00;
-	P0 = P2 = P3 = P4 = 0x00;
+	P0M0 = P2M0 = P3M0 = P4M0 = 0xff;
+	P0 = P2 = P3 = P4 = 0xff;
 }
 
 #ifdef CONFIG_MATRIXS_TEST

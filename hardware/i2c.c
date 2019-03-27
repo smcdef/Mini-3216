@@ -52,7 +52,7 @@ static char i2c_transfer_byte(unsigned char buf)
 	char ack;
 
 	for(i = 0; i < 8; i++) {
-		sda = !!((buf << i) & 0x80);
+		sda = !!((buf << i) & BIT(7));
 		_nop_();
 		scl = 1;
 		udelay(5);
@@ -94,7 +94,7 @@ static char i2c_read_byte(void)
 		_nop_();
 		buf <<= 1;
 		if (sda)
-			buf++;
+			buf |= BIT(0);
 		_nop_();
 		_nop_();
 		_nop_();
@@ -154,7 +154,7 @@ char i2c_read(char slave_addr, char addr, char *buf, unsigned char len)
 		return -1;
 
 	i2c_start();
-	if (!i2c_transfer_byte(slave_addr | (1 << 0)))
+	if (!i2c_transfer_byte(slave_addr | BIT(0)))
 		return -1;
 
 	for(i = 0; i < len; i++) {
@@ -169,6 +169,6 @@ char i2c_read(char slave_addr, char addr, char *buf, unsigned char len)
 
 void i2c_init(void)
 {
-	P1M1 &= ~(3 << 4);
-	P1M0 |= 3 << 4;
+	P1M1 &= ~GENMASK(5, 4);
+	P1M0 |= GENMASK(5, 4);
 }

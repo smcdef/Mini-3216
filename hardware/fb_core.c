@@ -52,6 +52,7 @@ static void led_on_delay(unsigned char i)
 }
 
 #define MATRIX_MAX_COLUMN	(MATRIX_COLUMNS - 1)
+#define MATRIXS_MAX_COLUMN	(MATRIXS_COLUMNS - 1)
 
 #define LED_ON(mask, anode, brightness)					\
 	do {								\
@@ -259,7 +260,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
 		return offset;
 
-	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
+	for (i = 0; i < n - MATRIXS_MAX_COLUMN; ++i) {
 		for (j = 0; j < speed; ++j)
 			fb_show(fb_info);
 		fb_info->offset++;
@@ -281,7 +282,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
 		return offset;
 
-	for (i = 0; i < n - MATRIXS_COLUMNS_MASK; ++i) {
+	for (i = 0; i < n - MATRIXS_MAX_COLUMN; ++i) {
 		for (j = 0; j < speed; ++j)
 			fb_show(fb_info);
 		fb_info->offset--;

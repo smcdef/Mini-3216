@@ -65,9 +65,9 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1 = ~(1 << column);					\
+		port1 = ~BIT(column);					\
 		for (i = 0; i < 8; i++) {				\
-			char mask = 1 << i;				\
+			char mask = BIT(i);				\
 									\
 			if (dat & mask) {				\
 				DRIVER_ONE_LED(mask, port0, brightness);\
@@ -85,12 +85,10 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1 = ~(1 << (7 - column));				\
+		port1 = ~BIT(7 - column);				\
 		for (i = 0; i < 8; i++) {				\
-			char mask = 1 << i;				\
-									\
-			if (dat & mask) {				\
-				DRIVER_ONE_LED(1 << (7 - i), port0,	\
+			if (dat & BIT(i)) {				\
+				DRIVER_ONE_LED(BIT(7 - i), port0,	\
 					       brightness);		\
 				if (fair)				\
 					led_on_delay(fair - brightness);\

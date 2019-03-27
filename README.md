@@ -12,15 +12,15 @@
 
 我个人是集齐了红、蓝、白、橙、绿等几种颜色。总得效果来说各个颜色都挺好看。各有特色。附上两张蓝色显示效果图。
 
-<img src="image/time.JPG" style="zoom:25%" />
+<img src="Documentation/image/time.JPG" style="zoom:25%" />
 
-<img src="image/temperature.JPG" style="zoom:27%" />
+<img src="Documentation/image/temperature.JPG" style="zoom:27%" />
 
 硬件经过几次改版，现在的硬件具有上下左右4个micro USB口，方便供电。上下左右4个光敏电阻全方位检测环境光强。背面3个触摸按键。PCB top layout 和 bottom layout 展示如下图所示。
 
-<img src="image/top_layout.png" style="zoom:43%" />
+<img src="Documentation/image/top_layout.png" style="zoom:43%" />
 
-<img src="image/bottom_layout.png" style="zoom:45%" />
+<img src="Documentation/image/bottom_layout.png" style="zoom:45%" />
 
 ## 元器件清单
 

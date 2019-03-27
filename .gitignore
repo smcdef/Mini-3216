@@ -1,8 +1,10 @@
 /*
 !.gitignore
-!/hardware/
+!/drivers/
+!/core/
+!/include/
 !/user/
 !/pcb/
-!/image/
+!/Documentation/
 !README.md
 !STARTUP.A51

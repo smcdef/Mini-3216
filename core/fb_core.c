@@ -256,11 +256,7 @@ static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
 /**
  * fb_show - Frame buffer show to dot-matrix screen.
  *
- * @offset: The offset relative to the frame_buffer
- * @brightness: The brightness of each LED
- * @rotate: Whether to rotate display
- * @fair: If @fair is true, each LED will be on or off for the same time.
- *	  Otherwise, only the LED that needs to be on will delay.
+ * @fb_info: The frame buffer info.
  */
 void fb_show(struct fb_info *fb_info)
 {

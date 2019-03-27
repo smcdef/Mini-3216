@@ -31,6 +31,15 @@
 #define FB_SIZE				CONFIG_FB_SIZE
 #define FB_COLUMNS			(FB_SIZE >> 1)
 
+/**
+ * struct fb_info - Frame buffer info.
+ *
+ * @offset:	The offset relative to the frame_buffer
+ * @brightness:	The brightness of each LED
+ * @rotate:	Whether to rotate display
+ * @fair:	If @fair is true, each LED will be on or off for the same time.
+ *		Otherwise, only the LED that needs to be on will delay.
+ */
 struct fb_info {
 	unsigned int offset;
 	bool rotate;

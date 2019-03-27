@@ -58,7 +58,7 @@ static void led_on_delay(unsigned char i)
 		port##M1 = ~(mask);					\
 		led_on_delay(brightness);				\
 		port##M1 = 0xff;					\
-	} while(0)
+	} while (0)
 
 #define DECLARE_MATRIX_DISP(n, port0, port1)				\
 	static void matrix##n##_disp(char column, char dat,		\

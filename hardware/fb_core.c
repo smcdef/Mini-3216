@@ -51,7 +51,9 @@ static void led_on_delay(unsigned char i)
 	while (i--);
 }
 
-#define DRIVER_ONE_LED(mask, port, brightness)				\
+#define MATRIX_MAX_COLUMN	(MATRIX_COLUMNS - 1)
+
+#define LED_ON(mask, port, brightness)					\
 	do {								\
 		port##M1 = ~(mask);					\
 		led_on_delay(brightness);				\
@@ -66,11 +68,11 @@ static void led_on_delay(unsigned char i)
 		char i;							\
 									\
 		port1 = ~BIT(column);					\
-		for (i = 0; i < 8; i++) {				\
+		for (i = 0; i < MATRIX_COLUMNS; i++) {			\
 			char mask = BIT(i);				\
 									\
 			if (dat & mask) {				\
-				DRIVER_ONE_LED(mask, port0, brightness);\
+				LED_ON(mask, port0, brightness);	\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
@@ -85,11 +87,11 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1 = ~BIT(7 - column);				\
-		for (i = 0; i < 8; i++) {				\
+		port1 = ~BIT(MATRIX_MAX_COLUMN - column);		\
+		for (i = 0; i < MATRIX_COLUMNS; i++) {			\
 			if (dat & BIT(i)) {				\
-				DRIVER_ONE_LED(BIT(7 - i), port0,	\
-					       brightness);		\
+				LED_ON(BIT(MATRIX_MAX_COLUMN - i),	\
+				       port0, brightness);		\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\

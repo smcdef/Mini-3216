@@ -17,19 +17,24 @@
 sbit scl = P1 ^ 4;
 sbit sda = P1 ^ 5;
 
+#define NOP(n)					\
+	do {					\
+		unsigned char i;		\
+						\
+		for (i = 0; i < n; ++i)		\
+			_nop_();		\
+	} while (0)
+
 static void i2c_start(void)
 {
 	sda = 1;
-	_nop_();
-	_nop_();
+	NOP(2);
 	scl = 1;
 	udelay(5);
 	sda = 0;
 	udelay(5);
 	scl = 0;
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(3);
 }
 
 static void i2c_stop(void)
@@ -39,11 +44,7 @@ static void i2c_stop(void)
 	scl = 1;
 	udelay(5);
 	sda = 1;
-	_nop_();
-	_nop_();
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(5);
 }
 
 static char i2c_transfer_byte(unsigned char buf)
@@ -58,22 +59,14 @@ static char i2c_transfer_byte(unsigned char buf)
 		udelay(5);
 		scl = 0;
 	}
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(3);
 	sda = 1;
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(3);
 	scl = 1;
-	_nop_();
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(4);
 	ack = !sda;
 	scl = 0;
-	_nop_();
-	_nop_();
+	NOP(2);
 
 	return ack;
 }
@@ -89,20 +82,14 @@ static char i2c_read_byte(void)
 		scl = 0;
 		udelay(5);
 		scl = 1;
-		_nop_();
-		_nop_();
-		_nop_();
+		NOP(3);
 		buf <<= 1;
 		if (sda)
 			buf |= BIT(0);
-		_nop_();
-		_nop_();
-		_nop_();
+		NOP(3);
 	}
 	scl = 0;
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(3);
 
 	return buf;
 }
@@ -110,15 +97,11 @@ static char i2c_read_byte(void)
 static void i2c_master_ack(char ack)
 {
 	sda = ack;
-	_nop_();
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP(4);
 	scl = 1;
 	udelay(5);
 	scl = 0;
-	_nop_();
-	_nop_();
+	NOP(2);
 }
 
 char i2c_transfer(char slave_addr, char addr, char *buf, unsigned char len)

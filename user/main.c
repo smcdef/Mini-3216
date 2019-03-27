@@ -474,7 +474,7 @@ static bool interface_switching(struct user_data idata *user, char key)
 		fb_info->offset = fb_scan(fb_info, 128,
 					  SEETING_TIME_SCAN_SPEED);
 #else
-		fb_info->offset = fb_scan_string(fb_info,
+		fb_info->offset = fb_scan_string(fb_info, MATRIXS_COLUMNS,
 						 SEETING_TIME_SCAN_SPEED,
 						 "设置时间");
 		if (current->fb_load)

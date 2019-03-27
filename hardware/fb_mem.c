@@ -15,11 +15,13 @@
 #include "font.h"
 #include "fb_mem.h"
 
-unsigned int fb_scan_string(struct fb_info *fb_info, unsigned char speed,
-			    const char *s)
+unsigned int fb_scan_string(struct fb_info *fb_info, unsigned int offset,
+			    unsigned char speed, const char *s)
 {
 	char code *encode;
-	unsigned int new_columns = 0, offset = fb_info->offset;
+	unsigned int new_columns = offset;
+
+	offset += fb_info->offset;
 
 	while (*s) {
 		char width = search_encode(s, &encode);

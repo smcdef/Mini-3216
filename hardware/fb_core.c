@@ -53,32 +53,32 @@ static void led_on_delay(unsigned char i)
 
 #define MATRIX_MAX_COLUMN	(MATRIX_COLUMNS - 1)
 
-#define LED_ON(mask, port, brightness)					\
+#define LED_ON(mask, anode, brightness)					\
 	do {								\
-		port##M1 = ~(mask);					\
+		anode##M1 = ~(mask);					\
 		led_on_delay(brightness);				\
-		port##M1 = 0xff;					\
+		anode##M1 = 0xff;					\
 	} while (0)
 
-#define DECLARE_MATRIX_DISP(n, port0, port1)				\
+#define DECLARE_MATRIX_DISP(n, anode, cathode)				\
 	static void matrix##n##_disp(char column, char dat,		\
 				     unsigned char brightness,		\
 				     unsigned char fair)		\
 	{								\
 		char i;							\
 									\
-		port1 = ~BIT(column);					\
+		cathode = ~BIT(column);					\
 		for (i = 0; i < MATRIX_COLUMNS; i++) {			\
 			char mask = BIT(i);				\
 									\
 			if (dat & mask) {				\
-				LED_ON(mask, port0, brightness);	\
+				LED_ON(mask, anode, brightness);	\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port1 = 0xff;						\
+		cathode = 0xff;						\
 	}								\
 									\
 	static void matrix##n##_disp_rotate(char column, char dat, 	\
@@ -87,17 +87,17 @@ static void led_on_delay(unsigned char i)
 	{								\
 		char i;							\
 									\
-		port1 = ~BIT(MATRIX_MAX_COLUMN - column);		\
+		cathode = ~BIT(MATRIX_MAX_COLUMN - column);		\
 		for (i = 0; i < MATRIX_COLUMNS; i++) {			\
 			if (dat & BIT(i)) {				\
 				LED_ON(BIT(MATRIX_MAX_COLUMN - i),	\
-				       port0, brightness);		\
+				       anode, brightness);		\
 				if (fair)				\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\
 		}							\
-		port1 = 0xff;						\
+		cathode = 0xff;						\
 	}								\
 									\
 /* Just for macro definition ends with a semicolon for Keil C51 */	\

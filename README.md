@@ -1,6 +1,6 @@
 # MINI 3216 电子时钟
 
-[![GitHub](https://img.shields.io/badge/license-GPL--2.0-red.svg)](https://github.com/smcdef/Mini-3216/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/smcdef/Mini-3216.svg)](https://github.com/smcdef/Mini-3216/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/smcdef/Mini-3216.svg)](https://github.com/smcdef/Mini-3216/releases)
 [![GitHub pull-requests](https://img.shields.io/github/issues-pr/smcdef/Mini-3216.svg)](https://github.com/smcdef/Mini-3216/pulls)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blueviolet.svg?style=flat)](https://github.com/smcdef/Mini-3216/pulls)

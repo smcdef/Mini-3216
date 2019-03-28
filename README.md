@@ -1,5 +1,9 @@
 # MINI 3216电子时钟
 
+[![GitHub](https://img.shields.io/badge/license-GPL--2.0-red.svg)](https://github.com/smcdef/Mini-3216/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/badge/release-v5.1-blue.svg)](https://github.com/smcdef/Mini-3216/releases)
+[![GitHub pull-requests](https://img.shields.io/badge/pull%20requests-welcome-success.svg)](https://github.com/smcdef/Mini-3216/pulls)
+
 还记得5年前刚入门51单片机的时候的学习场景。当年单片机的学习之路是跟着杜洋的《爱上单片机》一书学习。那时候就很喜欢这本书里面的电子制作。杜老师有很多的电子DIY作品，唯一让我感兴趣的就是Mini3216。这是一个电子时钟。非常的有意思。刚学习单片机的时候就励志以后一定也做个一模一样的时钟。
 
 但是当我真的开始琢磨时，发现事情并不是那么的简单。如此简单的电路是怎么驱动 32 x 16 点阵的呢？很是好奇，经过自己的琢磨终于想明白了原理。于是就开始了自己的DIY之旅。虽然很多年过去了，Mini 3216已经陪伴了我4个春秋。

@@ -111,7 +111,7 @@ static void led_on_delay(unsigned char i)
 									\
 			if (dat & mask) {				\
 				LED_ON(mask, anode, brightness);	\
-				if (fair)				\
+				if (fair > brightness)			\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\
@@ -130,7 +130,7 @@ static void led_on_delay(unsigned char i)
 			if (dat & BIT(i)) {				\
 				LED_ON(BIT(MATRIX_MAX_COLUMN - i),	\
 				       anode, brightness);		\
-				if (fair)				\
+				if (fair > brightness)			\
 					led_on_delay(fair - brightness);\
 			} else if (fair)				\
 				led_on_delay(fair);			\

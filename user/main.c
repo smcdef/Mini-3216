@@ -92,11 +92,11 @@ static void user_data_init(void)
 	    user_data.settings.oscillator_on > 1) {
 		user_data.settings.brightness = DEFAULT_BRIGHTNESS;
 		user_data.settings.oscillator_on = false;
-		ds3231_enable_oscillator(false);
 		eeprom_write(EEPROM_SECTOR1_ADDR, &user_data.settings,
 			     sizeof(user_data.settings));
 	}
 
+	ds3231_enable_oscillator(user_data.settings.oscillator_on);
 	user_data.fb_info.brightness = user_data.settings.brightness;
 }
 

@@ -21,7 +21,7 @@ enum {
 	true = 1,
 };
 
-typedef char bool;
+typedef unsigned char bool;
 
 #ifndef NULL
 #define NULL	((void *)0)

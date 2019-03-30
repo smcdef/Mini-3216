@@ -79,14 +79,25 @@ static struct user_data idata user_data;
 static void user_data_init(void)
 {
 	memset(&user_data, 0, sizeof(user_data));
-	user_data.fb_info.brightness = DEFAULT_BRIGHTNESS;
-	user_data.settings.brightness = DEFAULT_BRIGHTNESS;
 	user_data.fb_info.fair = false;
 	user_data.fb_info.rotate = !is_rotate;
 	user_data.force_update = true;
 #ifdef CONFIG_DS3231_INT
 	user_data.rtc_update = true;
 #endif
+	eeprom_read(EEPROM_SECTOR1_ADDR, &user_data.settings,
+		    sizeof(user_data.settings));
+
+	if (user_data.settings.brightness > DEFAULT_BRIGHTNESS ||
+	    user_data.settings.oscillator_on > 1) {
+		user_data.settings.brightness = DEFAULT_BRIGHTNESS;
+		user_data.settings.oscillator_on = false;
+		ds3231_enable_oscillator(false);
+		eeprom_write(EEPROM_SECTOR1_ADDR, &user_data.settings,
+			     sizeof(user_data.settings));
+	}
+
+	user_data.fb_info.brightness = user_data.settings.brightness;
 }
 
 static void pca_init(void)
@@ -481,6 +492,19 @@ static bool interface_switching(struct user_data idata *user, char key)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
 		fb_info->offset = fb_scan(fb_info, 64, SEETING_TIME_SCAN_SPEED);
 #endif
+		break;
+	case KEY_LEFT | KEY_RIGHT | KEY_ENTER:
+		/* special for root menu and enter the setup time menu */
+		if (!is_root_menu(current))
+			break;
+
+		if (user->settings.oscillator_on)
+			break;
+		user->settings.oscillator_on = true;
+		eeprom_write(EEPROM_SECTOR1_ADDR, &user->settings,
+			     sizeof(user->settings));
+		ds3231_enable_oscillator(true);
+		buzzer_enter();
 		break;
 	default:
 		return false;

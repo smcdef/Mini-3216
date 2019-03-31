@@ -65,7 +65,7 @@ struct user_data {
 		unsigned char brightness;
 		bool oscillator_on;
 	} settings;
-	bool force_update;
+	bool fb_update;
 	char key;
 };
 
@@ -81,7 +81,7 @@ static void user_data_init(void)
 	memset(&user_data, 0, sizeof(user_data));
 	user_data.fb_info.fair = false;
 	user_data.fb_info.rotate = !is_rotate;
-	user_data.force_update = true;
+	user_data.fb_update = true;
 #ifdef CONFIG_DS3231_INT
 	user_data.rtc_update = true;
 #endif
@@ -172,7 +172,7 @@ static void fb_load_times(void *priv)
 	struct user_data idata *user = priv;
 	struct rtc idata *rtc = &user->rtc;
 	struct fb_info idata *fb_info = &user->fb_info;
-	bool force = user->force_update;
+	bool force = user->fb_update;
 	char idata str[5];
 	char half_low;
 	static bool is_temp = false;
@@ -196,7 +196,7 @@ static void fb_load_times(void *priv)
 
 	if (force) {
 		fb_info->offset = 0;
-		user->force_update = false;
+		user->fb_update = false;
 		is_temp = false;
 	}
 
@@ -428,7 +428,7 @@ static bool interface_switching(struct user_data idata *user, char key)
 		buzzer_enter();
 		current = current->child;
 		if (is_root_menu(current)) {
-			user->force_update = true;
+			user->fb_update = true;
 			break;
 		}
 

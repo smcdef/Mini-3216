@@ -104,9 +104,10 @@ static void i2c_master_ack(char ack)
 	NOP(2);
 }
 
-char i2c_transfer(char slave_addr, char addr, char *buf, unsigned char len)
+char i2c_transfer(char slave_addr, char addr, void *buf, unsigned char len)
 {
 	char i;
+	char *tx = (char *)buf;
 
 	i2c_start();
 	if (!i2c_transfer_byte(slave_addr << 1))
@@ -116,7 +117,7 @@ char i2c_transfer(char slave_addr, char addr, char *buf, unsigned char len)
 		return -1;
 
 	for(i = 0; i < len; i++)
-		if (!i2c_transfer_byte(*buf++))
+		if (!i2c_transfer_byte(*tx++))
 			return -1;
 
 	i2c_stop();
@@ -124,9 +125,10 @@ char i2c_transfer(char slave_addr, char addr, char *buf, unsigned char len)
 	return 0;
 }
 
-char i2c_read(char slave_addr, char addr, char *buf, unsigned char len)
+char i2c_read(char slave_addr, char addr, void *buf, unsigned char len)
 {
 	char i;
+	char *rx = (char *)buf;
 
 	slave_addr <<= 1;
 	i2c_start();
@@ -141,7 +143,7 @@ char i2c_read(char slave_addr, char addr, char *buf, unsigned char len)
 		return -1;
 
 	for(i = 0; i < len; i++) {
-		*buf++ = i2c_read_byte();
+		*rx++ = i2c_read_byte();
 		i2c_master_ack(i == len - 1);
 	}
 

@@ -505,7 +505,7 @@ static bool interface_switching(struct user_data idata *user, char key)
 			     sizeof(user->settings));
 		ds3231_enable_oscillator(true);
 		buzzer_enter();
-		break;
+		return true;
 	default:
 		return false;
 	}

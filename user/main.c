@@ -549,12 +549,12 @@ void main(void)
 			current->operate(current->private);
 
 		/**
-		* We should disable local irq when call fb_show().
-		* But we can not do this, because if we do that,
-		* the buzzer_chime() will work abnormal. And now
-		* we can do that. Because timer0 is not able to
-		* mask interrupts via EA = 0.
-		*/
+		 * We should disable local irq when call fb_show().
+		 * But we can not do this, because if we do that,
+		 * the buzzer_chime() will work abnormal. And now
+		 * we can do that. Because timer0 is not able to
+		 * mask interrupts via EA = 0.
+		 */
 		local_irq_disable();
 		fb_show(fb_info);
 		local_irq_enable();

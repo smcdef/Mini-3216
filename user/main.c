@@ -494,7 +494,7 @@ static bool interface_switching(struct user_data idata *user, char key)
 #endif
 		break;
 	case KEY_LEFT | KEY_RIGHT | KEY_ENTER:
-		/* special for root menu and enter the setup time menu */
+		/* special for root menu and enable/disable oscillator */
 		if (!is_root_menu(current))
 			break;
 

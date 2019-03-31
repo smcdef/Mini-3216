@@ -55,7 +55,7 @@ struct menu {
 };
 
 struct user_data {
-	union timekeeping timekeeping;
+	struct rtc rtc;
 	struct fb_info fb_info;
 	bool night_mode;
 #ifdef CONFIG_DS3231_INT
@@ -159,18 +159,18 @@ static bool should_show_temperature(struct user_data idata *user)
 	return !user->night_mode;
 }
 
-static bool should_chime(union timekeeping *timekeeping)
+static bool should_chime(struct rtc *rtc)
 {
-	return timekeeping->time.sec == 0x58 &&
-	       timekeeping->time.min == 0x59 &&
-	       timekeeping->time.hour > 0x07 && timekeeping->time.hour < 0x23;
+	return rtc->sec == 0x58 &&
+	       rtc->min == 0x59 &&
+	       rtc->hour > 0x07 && rtc->hour < 0x23;
 }
 
 static void fb_load_times(void *priv)
 {
 	static char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
 	struct user_data idata *user = priv;
-	union timekeeping idata *timekeeping = &user->timekeeping;
+	struct rtc idata *rtc = &user->rtc;
 	struct fb_info idata *fb_info = &user->fb_info;
 	bool force = user->force_update;
 	char idata str[5];
@@ -183,15 +183,15 @@ static void fb_load_times(void *priv)
 		return;
 	user->rtc_update = false;
 #endif
-	if (ds3231_read_times(timekeeping))
+	if (ds3231_read_times(rtc))
 		return;
 
-	if (sec_old == timekeeping->time.sec &&
-	    min_old == timekeeping->time.min &&
-	    hour_old == timekeeping->time.hour && !force)
+	if (sec_old == rtc->sec &&
+	    min_old == rtc->min &&
+	    hour_old == rtc->hour && !force)
 		return;
 
-	if (should_chime(timekeeping) && !user->night_mode)
+	if (should_chime(rtc) && !user->night_mode)
 		buzzer_chime();
 
 	if (force) {
@@ -200,9 +200,9 @@ static void fb_load_times(void *priv)
 		is_temp = false;
 	}
 
-	sec_old = timekeeping->time.sec;
-	if (hour_old != timekeeping->time.hour || force) {
-		hour_old = timekeeping->time.hour;
+	sec_old = rtc->sec;
+	if (hour_old != rtc->hour || force) {
+		hour_old = rtc->hour;
 		str[0] = hour_old / 16 + '0';
 		str[1] = ' ';
 		str[2] = hour_old % 16 + '0';
@@ -221,8 +221,8 @@ static void fb_load_times(void *priv)
 	str[2] = '\0';
 	offset += fb_copy_string(offset, str);
 
-	if (min_old != timekeeping->time.min || force) {
-		min_old = timekeeping->time.min;
+	if (min_old != rtc->min || force) {
+		min_old = rtc->min;
 		str[0] = min_old / 16 + '0';
 		str[1] = ' ';
 		str[2] = min_old % 16 + '0';

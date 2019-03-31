@@ -28,20 +28,23 @@ enum set_type {
 	SET_YEAR,
 };
 
-union timekeeping {
-	struct {
-		char sec;
-		char min;
-		char hour;
-	} time;
-	char times[3];
+struct rtc {
+	char sec;
+	char min;
+	char hour;
+	char day;
+	char date;
+	char month;
+	char year;
 };
 
 char ds3231_init(void);
 char ds3231_enable_oscillator(bool enable);
-char ds3231_read_times(union timekeeping *timekeeping);
+char ds3231_read_date(struct rtc *rtc);
+char ds3231_read_times(struct rtc *rtc);
 char ds3231_read_time(enum set_type setting, char *value);
-char ds3231_set_times(union timekeeping *timekeeping);
+char ds3231_set_date(struct rtc *rtc);
+char ds3231_set_times(struct rtc *rtc);
 char ds3231_set_time(enum set_type setting, char value);
 char ds3231_read_temperature(char *integer, char *decimals);
 

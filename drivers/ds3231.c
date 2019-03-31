@@ -75,10 +75,14 @@ char ds3231_enable_oscillator(bool enable)
 			    &value, 1);
 }
 
-char ds3231_read_times(union timekeeping *timekeeping)
+char ds3231_read_date(struct rtc *rtc)
 {
-	return i2c_read(DS3231_SLAVER_ADDR, SECONDS_REGISTER_ADDR,
-			timekeeping->times, sizeof(timekeeping->times));
+	return i2c_read(DS3231_SLAVER_ADDR, SECONDS_REGISTER_ADDR, &rtc->day, 4);
+}
+
+char ds3231_read_times(struct rtc *rtc)
+{
+	return i2c_read(DS3231_SLAVER_ADDR, SECONDS_REGISTER_ADDR, rtc, 3);
 }
 
 char ds3231_read_time(enum set_type setting, char *value)
@@ -86,10 +90,15 @@ char ds3231_read_time(enum set_type setting, char *value)
 	return i2c_read(DS3231_SLAVER_ADDR, (char)setting, value, 1);
 }
 
-char ds3231_set_times(union timekeeping *timekeeping)
+char ds3231_set_date(struct rtc *rtc)
 {
 	return i2c_transfer(DS3231_SLAVER_ADDR, SECONDS_REGISTER_ADDR,
-			    timekeeping->times, sizeof(timekeeping->times));
+			    &rtc->day, 4);
+}
+
+char ds3231_set_times(struct rtc *rtc)
+{
+	return i2c_transfer(DS3231_SLAVER_ADDR, SECONDS_REGISTER_ADDR, rtc, 3);
 }
 
 char ds3231_set_time(enum set_type setting, char value)

@@ -520,6 +520,7 @@ void main(void)
 {
 	struct fb_info idata *fb_info = &user_data.fb_info;
 
+	local_irq_disable();
 	user_data_init();
 	buzzer_power_on();
 	fb_off();

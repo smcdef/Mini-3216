@@ -28,7 +28,7 @@
 #include <string.h>
 
 #define ADC_CHANNEL			6
-#define DEFAULT_BRIGHTNESS		120
+#define DEFAULT_BRIGHTNESS		90
 #define NIGHT_MODE_BRIGHTNESS		2
 #define NIGHT_MODE_FAIR_FACTOR		50
 #define SCAN_SPEED_BRIGHTNESS		55
@@ -214,13 +214,9 @@ static void fb_load_times(void *priv)
 	if (ds3231_read_times(rtc))
 		return;
 
-	if (sec_old == rtc->sec &&
-	    min_old == rtc->min &&
-	    hour_old == rtc->hour && !force)
+	if (sec_old == rtc->sec && !force)
 		return;
-
-	if (should_chime(rtc) && !user->night_mode)
-		buzzer_chime();
+	sec_old = rtc->sec;
 
 	if (force) {
 		fb_info->offset = 0;
@@ -228,7 +224,12 @@ static void fb_load_times(void *priv)
 		is_temp = false;
 	}
 
-	sec_old = rtc->sec;
+	if (is_temp)
+		goto skip_load;
+
+	if (should_chime(rtc) && !user->night_mode)
+		buzzer_chime();
+
 	if (hour_old != rtc->hour || force) {
 		hour_old = rtc->hour;
 		str[0] = hour_old / 16 + '0';
@@ -260,6 +261,7 @@ static void fb_load_times(void *priv)
 		offset += 13;
 	}
 
+skip_load:
 	half_low = sec_old & 0x0f;
 	if (half_low > 2 && half_low < 5 && should_show_temperature(user)) {
 		if (!is_temp) {

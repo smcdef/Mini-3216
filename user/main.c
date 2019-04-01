@@ -58,9 +58,6 @@ struct user_data {
 	struct rtc rtc;
 	struct fb_info fb_info;
 	bool night_mode;
-#ifdef CONFIG_DS3231_INT
-	bool rtc_update;
-#endif
 	struct {
 		unsigned char brightness;
 		bool oscillator_on;
@@ -87,13 +84,15 @@ static void local_irq_enable(void)
 }
 
 #ifdef CONFIG_DS3231_INT
+static bool rtc_update = true;
+
 static bool rtc_update_set_return(bool update)
 {
 	bool updated;
 
 	local_irq_disable();
-	updated = user_data.rtc_update;
-	user_data.rtc_update = update;
+	updated = rtc_update;
+	rtc_update = update;
 	local_irq_enable();
 
 	return updated;
@@ -101,7 +100,7 @@ static bool rtc_update_set_return(bool update)
 
 static void rtc_update_set_irq(bool update)
 {
-	user_data.rtc_update = update;
+	rtc_update = update;
 }
 #else
 static bool rtc_update_set_return(bool update)

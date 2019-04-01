@@ -101,6 +101,9 @@ static bool rtc_update_set_return(bool update)
 #else
 static bool rtc_update_set_return(bool update)
 {
+	/* Prevent compiler warning for not using 'update' */
+	update = update;
+
 	return true;
 }
 #endif

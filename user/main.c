@@ -350,7 +350,7 @@ static bool set_time_common(struct set_time_env idata *env)
 
 	if (ds3231_read_time(type, &value))
 		return false;
-	value = value / 16 * 10 + value % 16;
+	value = BCD_TO_DEC(value);
 
 	switch (env->key) {
 	case KEY_RIGHT:
@@ -367,7 +367,7 @@ static bool set_time_common(struct set_time_env idata *env)
 		return false;
 	}
 
-	ds3231_set_time(type, value / 10 * 16 + value % 10);
+	ds3231_set_time(type, DEC_TO_BCD(value));
 	fb_load_time(fb_info->offset, type, env->name);
 
 	return true;

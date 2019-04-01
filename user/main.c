@@ -98,6 +98,11 @@ static bool rtc_update_set_return(bool update)
 
 	return updated;
 }
+
+static void rtc_update_set_irq(bool update)
+{
+	user_data.rtc_update = update;
+}
 #else
 static bool rtc_update_set_return(bool update)
 {
@@ -105,6 +110,12 @@ static bool rtc_update_set_return(bool update)
 	update = update;
 
 	return true;
+}
+
+static void rtc_update_set_irq(bool update)
+{
+	/* Prevent compiler warning for not using 'update' */
+	update = update;
 }
 #endif
 
@@ -634,7 +645,7 @@ void pca_isr(void) interrupt 7 using 2
 {
 	if (CCF0) {
 		CCF0 = 0;
-		rtc_update_set_return(true);
+		rtc_update_set_irq(true);
 	}
 
 	if (CCF1) {

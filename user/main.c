@@ -27,13 +27,6 @@
 #include "buzzer.h"
 #include <string.h>
 
-#define ADC_CHANNEL			6
-#define DEFAULT_BRIGHTNESS		90
-#define NIGHT_MODE_BRIGHTNESS		2
-#define NIGHT_MODE_FAIR_FACTOR		50
-#define SCAN_SPEED_BRIGHTNESS		55
-#define SEETING_TIME_SCAN_SPEED		10
-
 sbit is_rotate = P1 ^ 0;
 
 struct set_time_env {
@@ -128,9 +121,9 @@ static void user_data_init(void)
 	eeprom_read(EEPROM_SECTOR1_ADDR, &user_data.settings,
 		    sizeof(user_data.settings));
 
-	if (user_data.settings.brightness > DEFAULT_BRIGHTNESS ||
+	if (user_data.settings.brightness > CONFIG_MAX_BRIGHTNESS ||
 	    user_data.settings.oscillator_on > 1) {
-		user_data.settings.brightness = DEFAULT_BRIGHTNESS;
+		user_data.settings.brightness = CONFIG_MAX_BRIGHTNESS;
 		user_data.settings.oscillator_on = false;
 		eeprom_write(EEPROM_SECTOR1_ADDR, &user_data.settings,
 			     sizeof(user_data.settings));
@@ -281,7 +274,7 @@ skip_load:
 				return;
 			}
 			brightness = fb_info->brightness;
-			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
+			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
 			fb_info->offset = fb_scan(fb_info, 64, 1);
 			fb_info->brightness = brightness;
@@ -303,7 +296,7 @@ skip_load:
 		 * the brightness.
 		 */
 		if (!user->night_mode)
-			fb_info->brightness = SCAN_SPEED_BRIGHTNESS;
+			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
 		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
 		fb_info->brightness = brightness;
 		local_irq_enable();
@@ -522,14 +515,14 @@ static bool interface_switching(struct user_data idata *user, char key)
 		if (current->fb_load)
 			offset += current->fb_load(offset);
 		fb_info->offset = fb_scan(fb_info, 128,
-					  SEETING_TIME_SCAN_SPEED);
+					  CONFIG_SEETING_TIME_SCAN_SPEED);
 #else
 		fb_info->offset = fb_scan_string(fb_info, MATRIXS_COLUMNS,
-						 SEETING_TIME_SCAN_SPEED,
+						 CONFIG_SEETING_TIME_SCAN_SPEED,
 						 "设置时间");
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
-		fb_info->offset = fb_scan(fb_info, 64, SEETING_TIME_SCAN_SPEED);
+		fb_info->offset = fb_scan(fb_info, 64, CONFIG_SEETING_TIME_SCAN_SPEED);
 #endif
 		break;
 	case KEY_LEFT | KEY_RIGHT | KEY_ENTER:
@@ -572,7 +565,7 @@ void main(void)
 	font_sort();
 	menu_init();
 	pca_init();
-	adc_init(ADC_CHANNEL);
+	adc_init(CONFIG_PRES_ADC_CHANNEL);
 	timer0_init();
 	timer1_init();
 	local_irq_enable();
@@ -608,7 +601,7 @@ void timer1_isr() interrupt 3 using 2
 
 	/* every 1280ms */
 	if (timer_count % 128 == 0)
-		adc_start(ADC_CHANNEL);
+		adc_start(CONFIG_PRES_ADC_CHANNEL);
 
 	timer_count++;
 }
@@ -630,11 +623,11 @@ void adc_isr(void) interrupt 5 using 1
 	result = ADC_RES;
 	if (result > NIGHT_MODE_ADC_VALUE) {
 		user_data.night_mode = true;
-		user_data.fb_info.fair = NIGHT_MODE_FAIR_FACTOR;
-		user_data.fb_info.brightness = NIGHT_MODE_BRIGHTNESS;
+		user_data.fb_info.fair = CONFIG_NIGHT_MODE_FAIR_FACTOR;
+		user_data.fb_info.brightness = CONFIG_NIGHT_MODE_BRIGHTNESS;
 	} else if (result > BRIGHT_MODE_ADC_VALUE) {
 		user_data.night_mode = true;
-		user_data.fb_info.brightness = NIGHT_MODE_BRIGHTNESS;
+		user_data.fb_info.brightness = CONFIG_NIGHT_MODE_BRIGHTNESS;
 		user_data.fb_info.fair = false;
 	} else if (user_data.night_mode) {
 		user_data.night_mode = false;

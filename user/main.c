@@ -76,15 +76,42 @@ static struct menu xdata *current;
 
 static struct user_data idata user_data;
 
+static void local_irq_disable(void)
+{
+	EA = 0;
+}
+
+static void local_irq_enable(void)
+{
+	EA = 1;
+}
+
+#ifdef CONFIG_DS3231_INT
+static bool rtc_update_set_return(bool update)
+{
+	bool updated;
+
+	local_irq_disable();
+	updated = user_data.rtc_update;
+	user_data.rtc_update = update;
+	local_irq_enable();
+
+	return updated;
+}
+#else
+static bool rtc_update_set_return(bool update)
+{
+	return true;
+}
+#endif
+
 static void user_data_init(void)
 {
 	memset(&user_data, 0, sizeof(user_data));
 	user_data.fb_info.fair = false;
 	user_data.fb_info.rotate = !is_rotate;
 	user_data.fb_update = true;
-#ifdef CONFIG_DS3231_INT
-	user_data.rtc_update = true;
-#endif
+	rtc_update_set_return(true);
 	eeprom_read(EEPROM_SECTOR1_ADDR, &user_data.settings,
 		    sizeof(user_data.settings));
 
@@ -111,16 +138,6 @@ static void pca_init(void)
 #endif
 	CCAPM1	= 0x31;		/* Rising and falling edges */
 	CR	= 1;
-}
-
-static void local_irq_disable(void)
-{
-	EA = 0;
-}
-
-static void local_irq_enable(void)
-{
-	EA = 1;
 }
 
 static unsigned int fb_load_temperature(unsigned int offset)
@@ -178,11 +195,9 @@ static void fb_load_times(void *priv)
 	static bool is_temp = false;
 	unsigned int offset = 0;
 
-#ifdef CONFIG_DS3231_INT
-	if (!user->rtc_update)
+	if (!rtc_update_set_return(false))
 		return;
-	user->rtc_update = false;
-#endif
+
 	if (ds3231_read_times(rtc))
 		return;
 
@@ -361,7 +376,11 @@ static void set_hour(void *priv)
 	env.name	= "时";
 	env.fb_info	= &user->fb_info;
 
-	set_time_common(&env);
+	if (!set_time_common(&env)) {
+		if (!rtc_update_set_return(false))
+			return;
+		fb_load_hour(user->fb_info.offset);
+	}
 }
 
 static void set_minute(void *priv)
@@ -376,8 +395,12 @@ static void set_minute(void *priv)
 	env.name	= "分";
 	env.fb_info	= &user->fb_info;
 
-	if (!set_time_common(&env))
+	if (!set_time_common(&env)) {
+		if (!rtc_update_set_return(false))
+			return;
+		fb_load_minute(user->fb_info.offset);
 		return;
+	}
 	ds3231_set_time(SET_SECOND, 0);
 }
 
@@ -428,6 +451,7 @@ static bool interface_switching(struct user_data idata *user, char key)
 		buzzer_enter();
 		current = current->child;
 		if (is_root_menu(current)) {
+			rtc_update_set_return(true);
 			user->fb_update = true;
 			break;
 		}
@@ -605,12 +629,11 @@ void adc_isr(void) interrupt 5 using 1
 
 void pca_isr(void) interrupt 7 using 2
 {
-#ifdef CONFIG_DS3231_INT
 	if (CCF0) {
 		CCF0 = 0;
-		user_data.rtc_update = true;
+		rtc_update_set_return(true);
 	}
-#endif
+
 	if (CCF1) {
 		CCF1 = 0;
 		user_data.fb_info.rotate = !is_rotate;

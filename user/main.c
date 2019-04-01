@@ -186,7 +186,8 @@ static bool should_chime(struct rtc *rtc)
 {
 	return rtc->sec == 0x58 &&
 	       rtc->min == 0x59 &&
-	       rtc->hour > 0x07 && rtc->hour < 0x23;
+	       rtc->hour >= DEC_TO_BCD(CONFIG_CHIME_START_HOUR - 1) &&
+	       rtc->hour < DEC_TO_BCD(CONFIG_CHIME_END_HOUR);
 }
 
 static void fb_load_times(void *priv)

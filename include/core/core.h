@@ -48,4 +48,7 @@ typedef unsigned char bool;
 #define GENMASK(h, l) \
 	(((~0U) - (1U << (l)) + 1) & (~0U >> (BITS_PER_INT - 1 - (h))))
 
+#define DEC_TO_BCD(dec)		((dec) / 10 * 16 + (dec) % 10)
+#define BCD_TO_DEC(bcd)		((bcd) / 16 * 10 + (bcd) % 16)
+
 #endif

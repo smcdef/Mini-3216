@@ -523,7 +523,8 @@ static bool interface_switching(struct user_data idata *user, char key)
 						 "设置时间");
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
-		fb_info->offset = fb_scan(fb_info, 64, CONFIG_SEETING_TIME_SCAN_SPEED);
+		fb_info->offset = fb_scan(fb_info, 64,
+					  CONFIG_SEETING_TIME_SCAN_SPEED);
 #endif
 		break;
 	case KEY_LEFT | KEY_RIGHT | KEY_ENTER:

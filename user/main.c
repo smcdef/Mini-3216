@@ -333,6 +333,33 @@ static unsigned int fb_load_minute(unsigned int offset)
 	return fb_load_time(offset, SET_MINUTES, "分");
 }
 
+static unsigned int fb_load_hour_and_minute(unsigned int offset)
+{
+	struct rtc xdata rtc;
+	char xdata str[10];
+
+	if (ds3231_read_times(&rtc))
+		return offset;
+
+	str[0] = rtc.hour / 16 + '0';
+	str[1] = ' ';
+	str[2] = rtc.hour % 16 + '0';
+	str[3] = ' ';
+
+	if (rtc.sec & BIT(0))
+		str[4] = '^';
+	else
+		str[4] = 'v';
+	str[5] = ' ';
+
+	str[6] = rtc.min / 16 + '0';
+	str[7] = ' ';
+	str[8] = rtc.min % 16 + '0';
+	str[9] = '\0';
+
+	return fb_copy_string(offset, str);
+}
+
 static void key_delay(struct fb_info *fb_info)
 {
 	char i;
@@ -426,6 +453,7 @@ static void menu_init(void)
 	root_menu.name = ROOT_MENU_NAME;
 	/* root_menu.child = &set_hour_menu; */
 	root_menu.private = &user_data;
+	root_menu.fb_load = fb_load_hour_and_minute;
 	root_menu.operate = show_times;
 
 	memset(&set_hour_menu, 0, sizeof(set_hour_menu));
@@ -462,7 +490,6 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		if (is_root_menu(current)) {
 			rtc_update_set_return(true);
 			user->fb_update = true;
-			break;
 		}
 
 		if (current->fb_load)

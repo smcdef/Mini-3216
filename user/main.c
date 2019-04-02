@@ -601,8 +601,8 @@ void timer1_isr() interrupt 3 using 2
 {
 	static unsigned char timer_count = 0;
 
-	/* every 1280ms */
-	if (timer_count % 128 == 0)
+	/* every 160ms */
+	if (timer_count % 16 == 0)
 		adc_start(CONFIG_PRES_ADC_CHANNEL);
 
 	timer_count++;

@@ -190,7 +190,7 @@ static bool should_chime(struct rtc *rtc)
 	       rtc->hour < DEC_TO_BCD(CONFIG_CHIME_END_HOUR);
 }
 
-static void fb_load_times(void *priv)
+static void show_times(void *priv)
 {
 	static char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
 	struct user_data idata *user = priv;
@@ -426,7 +426,7 @@ static void menu_init(void)
 	root_menu.name = ROOT_MENU_NAME;
 	/* root_menu.child = &set_hour_menu; */
 	root_menu.private = &user_data;
-	root_menu.operate = fb_load_times;
+	root_menu.operate = show_times;
 
 	memset(&set_hour_menu, 0, sizeof(set_hour_menu));
 	set_hour_menu.private = &user_data;

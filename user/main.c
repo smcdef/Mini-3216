@@ -320,7 +320,7 @@ static unsigned int fb_load_time(unsigned int offset, enum set_type type,
 	offset += fb_copy_string(offset, str);
 	offset += fb_copy_string(offset, s);
 
-	return offset_old - offset;
+	return offset - offset_old;
 }
 
 static unsigned int fb_load_hour(unsigned int offset)

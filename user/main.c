@@ -482,7 +482,8 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		else
 			fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				       current->name);
-		fb_info->offset = fb_scan(fb_info, 64, 1);
+		fb_info->offset = fb_scan(fb_info, 64,
+					  CONFIG_SETTING_SCAN_SPEED);
 		break;
 	case KEY_LEFT:
 		if (!current->sibling_prev)
@@ -490,7 +491,8 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		buzzer_key();
 		fb_copy_string(fb_info->offset - MATRIXS_COLUMNS,
 					current->sibling_prev->name);
-		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
+		fb_info->offset = fb_scan_reverse(fb_info, 64,
+						  CONFIG_SETTING_SCAN_SPEED);
 		current = current->sibling_prev;
 		break;
 	case KEY_RIGHT:
@@ -499,7 +501,8 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		buzzer_key();
 		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				current->sibling_next->name);
-		fb_info->offset = fb_scan(fb_info, 64, 1);
+		fb_info->offset = fb_scan(fb_info, 64,
+					  CONFIG_SETTING_SCAN_SPEED);
 		current = current->sibling_next;
 		break;
 	case KEY_LEFT | KEY_RIGHT:
@@ -513,7 +516,8 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		current = current->child;
 		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				current->name);
-		fb_info->offset = fb_scan(fb_info, 64, 1);
+		fb_info->offset = fb_scan(fb_info, 64,
+					  CONFIG_SETTING_SCAN_SPEED);
 		break;
 	case KEY_LEFT | KEY_ENTER:
 		/* special for root menu and enter the setup time menu */

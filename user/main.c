@@ -259,6 +259,8 @@ skip_load:
 	half_low = sec_old & 0x0f;
 	if (half_low > 2 && half_low < 5 && should_show_temperature(user)) {
 		if (!is_temp) {
+			unsigned char brightness;
+
 			/**
 			 * fb_info->brightness maybe alter in irq.
 			 * So we should disable irq to protect shared
@@ -272,19 +274,32 @@ skip_load:
 				local_irq_enable();
 				return;
 			}
+			brightness = fb_info->brightness;
+			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
 			fb_info->offset = fb_scan(fb_info, 64, 1);
+			fb_info->brightness = brightness;
 			local_irq_enable();
 			is_temp = true;
 		}
 	} else if (is_temp) {
+		unsigned char brightness;
+
 		/**
 		 * fb_info->brightness maybe alter in irq.
 		 * So we should disable irq to protect shared
 		 * variable.
 		 */
 		local_irq_disable();
+		brightness = fb_info->brightness;
+		/**
+		 * If we are in night mode, we should not increase
+		 * the brightness.
+		 */
+		if (!user->night_mode)
+			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
 		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
+		fb_info->brightness = brightness;
 		local_irq_enable();
 		is_temp = false;
 	}

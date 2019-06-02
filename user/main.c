@@ -475,7 +475,6 @@ static bool interface_switching(struct user_data xdata *user, char key)
 {
 	struct fb_info xdata *fb_info = &user->fb_info;
 	struct menu xdata *current_old = current;
-	bool success = false;
 #if CONFIG_FB_SIZE > 128
 	unsigned int offset;
 #endif
@@ -575,10 +574,7 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		return false;
 	}
 
-	if (current_old != current)
-		success = true;
-
-	return success;
+	return current_old != current;
 }
 
 void main(void)

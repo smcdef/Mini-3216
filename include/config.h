@@ -42,8 +42,18 @@
 #endif
 
 #if CONFIG_PRES_ADC_CHANNEL > 7 || CONFIG_PRES_ADC_CHANNEL < 0
-#error "CONFIG_PRES_ADC_CHANNEL should be less than or equal to 0 or
+#error "CONFIG_PRES_ADC_CHANNEL should be less than or equal to 0 or \
 	greater than or equal to 7"
+#endif
+
+#if defined (SDCC) || defined (__SDCC)
+#define xdata		__xdata
+#define pdata		__pdata
+#define idata		__idata
+#define code		__code
+#define bit		__bit
+#define interrupt	__interrupt
+#define using		__using
 #endif
 
 #endif

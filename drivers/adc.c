@@ -28,9 +28,9 @@ void adc_init(unsigned char channel)
 	P1ASF |= BIT(channel);
 #endif
 	ADC_CONTR = ADC_SPEEDHH;
-	_nop_();
+	NOP();
 	ADC_CONTR |= channel;
-	_nop_();
+	NOP();
 	ADC_CONTR |= ADC_POWER;
 	EADC = 1;
 
@@ -47,10 +47,10 @@ unsigned char adc_read(unsigned char channel)
 {
 	channel &= GENMASK(2, 0);
 	ADC_CONTR = ADC_POWER | ADC_SPEEDHH | channel | ADC_START;
-	_nop_();
-	_nop_();
-	_nop_();
-	_nop_();
+	NOP();
+	NOP();
+	NOP();
+	NOP();
 	while (!(ADC_CONTR & ADC_FLAG));
 	ADC_CONTR &= ~ADC_FLAG;
 

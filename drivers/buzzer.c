@@ -11,7 +11,7 @@
 #include "buzzer.h"
 #include "delay.h"
 
-sbit buzzer = P1 ^ 7;
+#define buzzer P1_7
 
 static xdata unsigned char mode = 0;
 static xdata unsigned char beep_time = 0, beep_count = 0;
@@ -22,17 +22,17 @@ void buzzer_power_on(void)
 	char i;
 
 	for (i = 0; i < 60; ++i) {
-		buzzer = ~buzzer;
+		buzzer = !buzzer;
 		udelay(600);
 	}
 
 	for (i = 0; i < 100; ++i) {
-		buzzer = ~buzzer;
+		buzzer = !buzzer;
 		udelay(480);
 	}
 
 	for (i = 0; i < 100; ++i) {
-		buzzer = ~buzzer;
+		buzzer = !buzzer;
 		udelay(180);
 	}
 	buzzer = 1;
@@ -77,7 +77,7 @@ void timer0_isr() interrupt 1 using 3
 	static xdata bool flag = false;
 
 	if (mode == 1) {
-		buzzer = ~buzzer;
+		buzzer = !buzzer;
 		count++;
 		if (count > beep_time) {
 			count = 0;
@@ -113,7 +113,7 @@ void timer0_isr() interrupt 1 using 3
 		}
 	} else if (mode == 0) {
 		if (beep_count != 1 && beep_count != 3 && beep_count != 5)
-			buzzer = ~buzzer;
+			buzzer = !buzzer;
 		count++;
 		if (count >= beep_time) {
 			count = 0;

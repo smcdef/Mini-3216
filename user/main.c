@@ -27,7 +27,7 @@
 #include "buzzer.h"
 #include <string.h>
 
-sbit is_rotate = P1 ^ 0;
+#define is_rotate P1_0
 
 struct set_time_env {
 	char key;
@@ -43,8 +43,8 @@ struct menu {
 	struct menu xdata *child;
 	struct menu xdata *sibling_next, *sibling_prev;
 	void xdata *private;
-	void (code *operate)(void xdata *private);
-	unsigned int (code *fb_load)(unsigned int offset);
+	void (*operate)(void xdata *private);
+	unsigned int (*fb_load)(unsigned int offset);
 };
 
 struct user_data {
@@ -192,7 +192,7 @@ static bool should_chime(struct rtc *rtc)
 
 static void show_times(void xdata *priv)
 {
-	static char sec_old = 0xff, min_old = 0xff, hour_old = 0xff;
+	static char sec_old = -1, min_old = -1, hour_old = -1;
 	struct user_data xdata *user = priv;
 	struct rtc xdata *rtc = &user->rtc;
 	struct fb_info xdata *fb_info = &user->fb_info;

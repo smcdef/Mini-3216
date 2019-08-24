@@ -27,7 +27,7 @@
 #define ENCODE_INDEX_SIZE       3
 #endif
 
-char search_encode(const char *index, char code **out);
+signed char search_encode(const char *index, char code **out);
 void font_sort(void);
 
 #endif

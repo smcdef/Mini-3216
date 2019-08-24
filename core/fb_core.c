@@ -267,7 +267,7 @@ void fb_show(struct fb_info *fb_info)
 	struct fb_column_info idata fb_column_info;
 	char FB_MEMORY_TYPE *fb = frame_buffer +
 				  ((fb_info->offset & FB_HALF_SIZE_MASK) << 1);
-	void (code *show)(struct fb_column_info idata *fb_column_info);
+	void (*show)(struct fb_column_info idata *fb_column_info);
 
 	fb_column_info.fair = fb_info->fair;
 	fb_column_info.brightness = fb_info->brightness;

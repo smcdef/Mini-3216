@@ -28,7 +28,7 @@ void udelay(unsigned int n)
 	unsigned char i;
 
 	while (n--) {
-		_nop_();
+		NOP();
 		i = 4;
 		while (--i);
 	}

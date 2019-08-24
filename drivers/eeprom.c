@@ -45,7 +45,7 @@ static unsigned char __eeprom_read(unsigned int addr)
 	IAP_ADDRH = addr >> 8;
 	IAP_TRIG  = 0x5A;
 	IAP_TRIG  = 0xA5;
-	_nop_();
+	NOP();
 	eeprom_close();
 
 	return IAP_DATA;
@@ -60,7 +60,7 @@ static void __eeprom_write(unsigned int addr, unsigned char dat)
 	IAP_DATA  = dat;
 	IAP_TRIG  = 0x5A;
 	IAP_TRIG  = 0xA5;
-	_nop_();
+	NOP();
 	eeprom_close();
 }
 
@@ -77,7 +77,7 @@ void eeprom_erase(unsigned int addr)
 	IAP_ADDRH  = addr >> 8;
 	IAP_TRIG   = 0x5A;
 	IAP_TRIG   = 0xA5;
-	_nop_();
+	NOP();
 	eeprom_close();
 }
 

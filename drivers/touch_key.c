@@ -15,9 +15,9 @@
 #include "delay.h"
 
 #ifdef CONFIG_BS813A
-sbit key1 = P5 ^ 4;
-sbit key2 = P5 ^ 5;
-sbit key3 = P1 ^ 2;
+#define key1 P5_4
+#define key2 P5_5
+#define key3 P1_2
 
 char touch_key_read(char *key_value)
 {
@@ -46,9 +46,9 @@ void touch_key_init(void)
 {
 }
 #else
-sbit unused = P1 ^ 2;
-sbit Data   = P5 ^ 5;
-sbit Clock  = P5 ^ 4;
+#define unused P1_2
+#define Data   P5_5
+#define Clock  P5_4
 
 static char key_read_byte(void)
 {

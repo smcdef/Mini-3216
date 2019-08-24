@@ -24,7 +24,7 @@ unsigned int fb_scan_string(struct fb_info *fb_info, unsigned int offset,
 	offset += fb_info->offset;
 
 	while (*s) {
-		char width = search_encode(s, &encode);
+		signed char width = search_encode(s, &encode);
 
 		/* skip invalid input */
 		if (width < 0) {

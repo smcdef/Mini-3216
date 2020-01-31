@@ -52,11 +52,12 @@ MCU_MODEL = mcs51
 # DEBUG   = --debug
 AFLAGS = -l -s
 CFLAGS = $(INCLUDE) -m$(MCU_MODEL) --model-$(MEM_MODEL) \
---out-fmt-ihx --fsigned-char --std-sdcc99 --opt-code-speed $(DEBUG)
+--out-fmt-ihx --fsigned-char --std-sdcc99 --opt-code-speed \
+--Werror $(DEBUG)
 
 LFLAGS = $(LIBPATH) $(LIBS) -m$(MCU_MODEL) --model-$(MEM_MODEL) \
 $(CODE_SIZE) $(IRAM_SIZE) $(XRAM_SIZE) --out-fmt-ihx --std-sdcc99 \
- --opt-code-speed $(DEBUG)
+ --opt-code-speed --Werror $(DEBUG)
 
 S = @
 

@@ -566,7 +566,6 @@ void main(void)
 	local_irq_disable();
 	user_data_init();
 	buzzer_power_on();
-	fb_off();
 	fb_matrixs_test();
 	uart_init();
 	touch_key_init();

@@ -47,7 +47,6 @@ struct fb_info {
 	unsigned char brightness;
 };
 
-void fb_off(void);
 void fb_matrixs_test(void);
 void fb_show(struct fb_info *fb_info);
 unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,

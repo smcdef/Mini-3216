@@ -153,13 +153,6 @@ DECLARE_MATRIX_DISP(5, P4, P0);
 DECLARE_MATRIX_DISP(6, P3, P2);
 DECLARE_MATRIX_DISP(7, P4, P2);
 
-void fb_off(void)
-{
-	P0M1 = P2M1 = P3M1 = P4M1 = 0xff;
-	P0M0 = P2M0 = P3M0 = P4M0 = 0xff;
-	P0 = P2 = P3 = P4 = 0xff;
-}
-
 #ifdef CONFIG_MATRIXS_TEST
 #define MATRIXS_FB_SIZE		(MATRIXS_COLUMNS << 1)
 
@@ -351,4 +344,18 @@ void fb_init(void)
 
 	for (fb = frame_buffer; fb < frame_buffer + sizeof(frame_buffer); fb++)
 		*fb = 0;
+
+	/* Reset gpio registers */
+	P0M1 = 0xff;
+	P2M1 = 0xff;
+	P3M1 = 0xff;
+	P4M1 = 0xff;
+	P0M0 = 0xff;
+	P2M0 = 0xff;
+	P3M0 = 0xff;
+	P4M0 = 0xff;
+	P0   = 0xff;
+	P2   = 0xff;
+	P3   = 0xff;
+	P4   = 0xff;
 }

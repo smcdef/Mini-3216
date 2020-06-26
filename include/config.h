@@ -14,7 +14,7 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_FB_SIZE_SHIFT			8
+#define CONFIG_FB_SIZE_SHIFT			7
 /**
  * CONFIG_FB_SIZE must be 2 to the power of n. Also, it should greater than or
  * equal to 128. For example 128, 256, 512, 1024 or 2048...

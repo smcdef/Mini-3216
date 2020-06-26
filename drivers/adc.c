@@ -24,9 +24,7 @@
 void adc_init(unsigned char channel)
 {
 	channel &= GENMASK(2, 0);
-#ifdef CONFIG_PRES_PULL_UP
 	P1ASF |= BIT(channel);
-#endif
 	ADC_CONTR = ADC_SPEEDHH;
 	NOP();
 	ADC_CONTR |= channel;

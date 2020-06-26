@@ -635,13 +635,8 @@ void timer1_isr() interrupt 3 using 2
 	timer_count++;
 }
 
-#ifdef CONFIG_PRES_PULL_UP
 #define NIGHT_MODE_ADC_VALUE		0xa0
 #define BRIGHT_MODE_ADC_VALUE		0x60
-#else
-#define NIGHT_MODE_ADC_VALUE		0xf0
-#define BRIGHT_MODE_ADC_VALUE		0xc8
-#endif
 
 /* ADC interrupt routine */
 void adc_isr(void) interrupt 5 using 1

@@ -50,7 +50,7 @@ unsigned int fb_copy_string(unsigned int offset, const char *s)
 	unsigned int offset_old = offset;
 
 	while (*s) {
-		char width = search_encode(s, &encode);
+		signed char width = search_encode(s, &encode);
 
 		/* skip invalid input */
 		if (width < 0) {

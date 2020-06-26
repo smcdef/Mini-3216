@@ -153,66 +153,58 @@ DECLARE_MATRIX_DISP(5, P4, P0);
 DECLARE_MATRIX_DISP(6, P3, P2);
 DECLARE_MATRIX_DISP(7, P4, P2);
 
-static void fb_show_column(struct fb_column_info idata *fb_column_info)
+static void fb_show_column(struct fb_column_info idata *info)
 {
-	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
-	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
-	unsigned char brightness = fb_column_info->brightness;
-	unsigned char fair = fb_column_info->fair;
+	char index = info->column >> MATRIX_COLUMN_SHIFT;
+	char offset = info->column & MATRIX_COLUMNS_MASK;
+	unsigned char brightness = info->brightness;
+	unsigned char fair = info->fair;
 
 	switch (index) {
 	case 0:
-		matrix0_disp(offset, fb_column_info->byte_h, brightness, fair);
-		matrix1_disp(offset, fb_column_info->byte_l, brightness, fair);
+		matrix0_disp(offset, info->byte_h, brightness, fair);
+		matrix1_disp(offset, info->byte_l, brightness, fair);
 		break;
 	case 1:
-		matrix2_disp(offset, fb_column_info->byte_h, brightness, fair);
-		matrix3_disp(offset, fb_column_info->byte_l, brightness, fair);
+		matrix2_disp(offset, info->byte_h, brightness, fair);
+		matrix3_disp(offset, info->byte_l, brightness, fair);
 		break;
 	case 2:
-		matrix4_disp(offset, fb_column_info->byte_h, brightness, fair);
-		matrix5_disp(offset, fb_column_info->byte_l, brightness, fair);
+		matrix4_disp(offset, info->byte_h, brightness, fair);
+		matrix5_disp(offset, info->byte_l, brightness, fair);
 		break;
 	case 3:
-		matrix6_disp(offset, fb_column_info->byte_h, brightness, fair);
-		matrix7_disp(offset, fb_column_info->byte_l, brightness, fair);
+		matrix6_disp(offset, info->byte_h, brightness, fair);
+		matrix7_disp(offset, info->byte_l, brightness, fair);
 		break;
 	default :
 		break;
 	}
 }
 
-static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
+static void fb_show_column_rotate(struct fb_column_info idata *info)
 {
-	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;
-	char offset = fb_column_info->column & MATRIX_COLUMNS_MASK;
-	unsigned char brightness = fb_column_info->brightness;
-	unsigned char fair = fb_column_info->fair;
+	char index = info->column >> MATRIX_COLUMN_SHIFT;
+	char offset = info->column & MATRIX_COLUMNS_MASK;
+	unsigned char brightness = info->brightness;
+	unsigned char fair = info->fair;
 
 	switch (index) {
 	case 0:
-		matrix7_disp_rotate(offset, fb_column_info->byte_h,
-				    brightness, fair);
-		matrix6_disp_rotate(offset, fb_column_info->byte_l,
-				    brightness, fair);
+		matrix7_disp_rotate(offset, info->byte_h, brightness, fair);
+		matrix6_disp_rotate(offset, info->byte_l, brightness, fair);
 		break;
 	case 1:
-		matrix5_disp_rotate(offset, fb_column_info->byte_h,
-				    brightness, fair);
-		matrix4_disp_rotate(offset, fb_column_info->byte_l,
-				    brightness, fair);
+		matrix5_disp_rotate(offset, info->byte_h, brightness, fair);
+		matrix4_disp_rotate(offset, info->byte_l, brightness, fair);
 		break;
 	case 2:
-		matrix3_disp_rotate(offset, fb_column_info->byte_h,
-				    brightness, fair);
-		matrix2_disp_rotate(offset, fb_column_info->byte_l,
-				    brightness, fair);
+		matrix3_disp_rotate(offset, info->byte_h, brightness, fair);
+		matrix2_disp_rotate(offset, info->byte_l, brightness, fair);
 		break;
 	case 3:
-		matrix1_disp_rotate(offset, fb_column_info->byte_h,
-				    brightness, fair);
-		matrix0_disp_rotate(offset, fb_column_info->byte_l,
-				    brightness, fair);
+		matrix1_disp_rotate(offset, info->byte_h, brightness, fair);
+		matrix0_disp_rotate(offset, info->byte_l, brightness, fair);
 		break;
 	default :
 		break;
@@ -227,22 +219,22 @@ static void fb_show_column_rotate(struct fb_column_info idata *fb_column_info)
 void fb_show(struct fb_info *fb_info)
 {
 	unsigned char i;
-	struct fb_column_info idata fb_column_info;
+	struct fb_column_info idata info;
 	char FB_MEMORY_TYPE *fb = frame_buffer +
 				  ((fb_info->offset & FB_HALF_SIZE_MASK) << 1);
-	void (*show)(struct fb_column_info idata *fb_column_info);
+	void (*show)(struct fb_column_info idata *info);
 
-	fb_column_info.fair = fb_info->fair;
-	fb_column_info.brightness = fb_info->brightness;
+	info.fair = fb_info->fair;
+	info.brightness = fb_info->brightness;
 	show = fb_info->rotate ? fb_show_column_rotate : fb_show_column;
 
 	for (i = 0; i < MATRIXS_COLUMNS; ++i) {
-		fb_column_info.column = i;
-		fb_column_info.byte_h = *fb++;
-		fb_column_info.byte_l = *fb++;
+		info.column = i;
+		info.byte_h = *fb++;
+		info.byte_l = *fb++;
 		if (fb == frame_buffer + sizeof(frame_buffer))
 			fb = frame_buffer;
-		show(&fb_column_info);
+		show(&info);
 	}
 }
 

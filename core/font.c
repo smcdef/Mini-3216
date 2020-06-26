@@ -428,8 +428,9 @@ static signed char search_character_encode(const char *index, char code **out)
 
 	while (high >= low) {
 		unsigned char mid = low + ((high - low) >> 1);
-		char result = memcmp(index, character_sort_entry[mid]->index,
-				     sizeof(character_sort_entry[0]->index));
+		signed char result = memcmp(index,
+					    character_sort_entry[mid]->index,
+					    ENCODE_INDEX_SIZE);
 
 		if (result > 0) {
 			low = mid + 1;
@@ -440,7 +441,7 @@ static signed char search_character_encode(const char *index, char code **out)
 			return CHARACTER_WIDTH;
 		}
 	}
-	*out = (void code *)sizeof(character_tables[0].index);
+	*out = (void code *)ENCODE_INDEX_SIZE;
 
 	return -1;
 }
@@ -460,7 +461,7 @@ void font_sort(void)
 		j = i - 1;
 		while (j >= 0 &&
 		       memcmp(character_sort_entry[j]->index, current->index,
-			      sizeof(character_sort_entry[0]->index)) > 0) {
+			      ENCODE_INDEX_SIZE) > 0) {
 			character_sort_entry[j + 1] = character_sort_entry[j];
 			--j;
 		}

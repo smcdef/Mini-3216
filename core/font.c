@@ -228,11 +228,11 @@ static signed char search_ascii_encode(const char *index, char code **out)
 	while (high >= low) {
 		char mid = low + ((high - low) >> 1);
 
-		if (ascii_tables[mid].index[0] > *index)
+		if (ascii_tables[mid].index[0] > *index) {
 			high = mid - 1;
-		else if (ascii_tables[mid].index[0] < *index)
+		} else if (ascii_tables[mid].index[0] < *index) {
 			low = mid + 1;
-		else {
+		} else {
 			*out = ascii_tables[mid].encode;
 			return ascii_tables[mid].width;
 		}

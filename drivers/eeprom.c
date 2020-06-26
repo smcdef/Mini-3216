@@ -121,6 +121,3 @@ int eeprom_read(unsigned int addr, void *des, int size)
 
 	return size;
 }
-
-
-

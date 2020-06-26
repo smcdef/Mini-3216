@@ -113,8 +113,9 @@ static void led_on_delay(unsigned char i)
 				LED_ON(mask, anode, brightness);	\
 				if (fair > brightness)			\
 					led_on_delay(fair - brightness);\
-			} else if (fair)				\
+			} else if (fair) {				\
 				led_on_delay(fair);			\
+			}						\
 		}							\
 		cathode = 0xff;						\
 	}								\
@@ -132,8 +133,9 @@ static void led_on_delay(unsigned char i)
 				       anode, brightness);		\
 				if (fair > brightness)			\
 					led_on_delay(fair - brightness);\
-			} else if (fair)				\
+			} else if (fair) {				\
 				led_on_delay(fair);			\
+			}						\
 		}							\
 		cathode = 0xff;						\
 	}								\

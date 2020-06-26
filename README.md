@@ -140,4 +140,5 @@
     - 点击**LX51 Misc**选项框，在Misc controls输入栏填写**REMOVEUNUSED**。
     - 点击**OK**，设置完成。
 4. 默认情况下，初次下载程序后，当断开主电源后DS3231默认不工作（备份电池省电，可以不使用后长时间放置）。当需要使用时候，需要按下背部3个按键。因此，当你发现断电后下次上电时间没有保存，请先按下3个按键尝试设置。如果设置不起效，可能原因是纽扣电池没电了，请更换电池。
-5. 如果你是用Mac烧写单片机，可以选择stcgal工具。运行命令： `stcgal -P stc15 -o clock_source=internal -t 27000 -b 115200 -p /dev/tty.wchusbserial14130 Mini3216-Clock.hex`
+5. 如果你是用Mac烧写单片机，可以选择stcgal工具。运行命令： `stcgal -P stc15 -o clock_source=internal -t 27000 -b 115200 -p /dev/tty.wchusbserial* Mini3216-Clock.hex`
+6. 强烈建议使用Keil C51编译源码，实测发现Keil C51对代码的优化效果远好于SDCC。hex目录下已经为你准备一份Keil C51编译的hex镜像。

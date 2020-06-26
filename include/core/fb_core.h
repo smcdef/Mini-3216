@@ -53,8 +53,8 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 		     unsigned char speed);
 unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 			     unsigned char speed);
-unsigned int fb_copy(unsigned int offset, const char *src,
-		     unsigned int width);
+unsigned char fb_copy(unsigned int offset, const char *src,
+		      unsigned char width);
 void fb_init(void);
 
 #endif

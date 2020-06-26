@@ -320,14 +320,11 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	return offset - (n - MATRIXS_COLUMNS);
 }
 
-/**
- * @width should range [0, FB_COLUMNS].
- */
-unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
+unsigned char fb_copy(unsigned int offset, const char *src, unsigned char width)
 {
 	char FB_MEMORY_TYPE *fb = frame_buffer +
 				  ((offset & FB_HALF_SIZE_MASK) << 1);
-	unsigned int n = width << 1;
+	unsigned char n = width << 1;
 
 	while (n--) {
 		*fb++ = *src++;

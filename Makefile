@@ -82,7 +82,7 @@ $(OUTDIR)/%.asm.rel : ./%.asm
 
 clean:
 	$(S) rm -rf $(OUTDIR)/*
-	$(S) rm -rf $(TARGET).hex
+	git checkout -- $(TARGET).hex
 
 flash:
 	stcgal -P stc15 -o clock_source=internal -t 27000 -b 115200 -p \

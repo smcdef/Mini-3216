@@ -170,7 +170,7 @@ void fb_matrixs_test(void)
 	struct fb_info fb_info;
 
 	memset(&fb_info, 0, sizeof(fb_info));
-	fb_set(0, 0, 32);
+	fb_init();
 	fb_info.brightness = 50;
 
 	for (i = 0; i < MATRIXS_FB_SIZE; ++i, ++fb) {
@@ -345,15 +345,10 @@ unsigned int fb_copy(unsigned int offset, const char *src, unsigned int width)
 	return width;
 }
 
-unsigned int fb_set(unsigned int offset, char c, unsigned int width)
+void fb_init(void)
 {
-	unsigned int ret = width;
-	char arr[2];
+	char FB_MEMORY_TYPE *fb;
 
-	arr[0] = c;
-	arr[1] = c;
-	while (width--)
-		offset += fb_copy(offset, arr, 1);
-
-	return ret;
+	for (fb = frame_buffer; fb < frame_buffer + sizeof(frame_buffer); fb++)
+		*fb = 0;
 }

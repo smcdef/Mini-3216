@@ -570,7 +570,7 @@ void main(void)
 	fb_matrixs_test();
 	uart_init();
 	touch_key_init();
-	fb_set(0, 0, 64);
+	fb_init();
 	i2c_init();
 	ds3231_init();
 	font_sort();

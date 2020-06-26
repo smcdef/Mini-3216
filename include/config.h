@@ -22,7 +22,6 @@
 #define CONFIG_FB_SIZE				(1 << CONFIG_FB_SIZE_SHIFT)
 /* system main clock */
 #define CONFIG_MAIN_FOSC			27000000L
-#define CONFIG_DS3231_INT
 #define CONFIG_BS813A
 #define CONFIG_PRES_ADC_CHANNEL			6
 #define CONFIG_MAX_BRIGHTNESS			80

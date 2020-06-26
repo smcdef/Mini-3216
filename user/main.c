@@ -76,7 +76,6 @@ static void local_irq_enable(void)
 	EA = 1;
 }
 
-#ifdef CONFIG_DS3231_INT
 static bool rtc_update = true;
 
 static bool rtc_update_set_return(bool update)
@@ -95,21 +94,6 @@ static void rtc_update_set_irq(bool update)
 {
 	rtc_update = update;
 }
-#else
-static bool rtc_update_set_return(bool update)
-{
-	/* Prevent compiler warning for not using 'update' */
-	update = update;
-
-	return true;
-}
-
-static void rtc_update_set_irq(bool update)
-{
-	/* Prevent compiler warning for not using 'update' */
-	update = update;
-}
-#endif
 
 static void user_data_init(void)
 {
@@ -139,9 +123,7 @@ static void pca_init(void)
 	CL	= 0;
 	CH	= 0;
 	CMOD	= 0x00;
-#ifdef CONFIG_DS3231_INT
 	CCAPM0	= 0x21;		/* Rising edge */
-#endif
 	CCAPM1	= 0x31;		/* Rising and falling edges */
 	CR	= 1;
 }

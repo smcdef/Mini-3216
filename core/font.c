@@ -27,7 +27,7 @@ struct character_code {
 
 static code struct ascii_code ascii_tables[] = {
 	{
-		{ '0', },
+		{ '0' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x7F, 0xFF, 0xFF, 0x03, 0xC0,
@@ -35,7 +35,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '1', },
+		{ '1' },
 		ASCII_WIDTH,
 		{
 			0x00, 0x00, 0x00, 0x00, 0x0C, 0xC0,
@@ -43,7 +43,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '2', },
+		{ '2' },
 		ASCII_WIDTH,
 		{
 			0x0E, 0xF0, 0x0F, 0xFC, 0x03, 0xCF,
@@ -51,7 +51,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '3', },
+		{ '3' },
 		ASCII_WIDTH,
 		{
 			0x06, 0x60, 0x87, 0xE1, 0x83, 0xC1,
@@ -59,7 +59,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '4', },
+		{ '4' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x00, 0xFF, 0x01, 0x80, 0x01,
@@ -67,7 +67,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '5', },
+		{ '5' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x60, 0xFF, 0xE1, 0x83, 0xC1,
@@ -75,7 +75,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '6', },
+		{ '6' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x7F, 0xFF, 0xFF, 0x83, 0xC1,
@@ -83,7 +83,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '7', },
+		{ '7' },
 		ASCII_WIDTH,
 		{
 			0x1E, 0x00, 0x1F, 0x00, 0x03, 0x00,
@@ -91,7 +91,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '8', },
+		{ '8' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x7F, 0xFF, 0xFF, 0x83, 0xC1,
@@ -99,7 +99,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '9', },
+		{ '9' },
 		ASCII_WIDTH,
 		{
 			0xFE, 0x60, 0xFF, 0xE1, 0x83, 0xC1,
@@ -107,7 +107,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ ' ', },
+		{ ' ' },
 		1,
 		{
 			0x00,
@@ -115,7 +115,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '-', },
+		{ '-' },
 		ASCII_WIDTH,
 		{
 			0x80, 0x01, 0x80, 0x01, 0x80, 0x01,
@@ -123,7 +123,7 @@ static code struct ascii_code ascii_tables[] = {
 		},
 	},
 	{
-		{ '.', },
+		{ '.' },
 		2,
 		{
 			0x00, 0x60,
@@ -131,7 +131,7 @@ static code struct ascii_code ascii_tables[] = {
 		}
 	},
 	{
-		{ '^', },
+		{ '^' },
 		4,
 		{
 			0x00, 0x00, 0x78, 0x3C,
@@ -139,7 +139,7 @@ static code struct ascii_code ascii_tables[] = {
 		}
 	},
 	{
-		{ 'c', },
+		{ 'c' },
 		8,
 		{
 			0x10, 0x00, 0x28, 0x00, 0x10, 0x3F, 0x80, 0x7F,
@@ -147,7 +147,7 @@ static code struct ascii_code ascii_tables[] = {
 		}
 	},
 	{
-		{ 'v', },
+		{ 'v' },
 		4,
 		{
 			0x00, 0x00, 0x3C, 0x78,
@@ -155,7 +155,7 @@ static code struct ascii_code ascii_tables[] = {
 		}
 	},
 	{
-		{ NONE_ASCII, },
+		{ NONE_ASCII },
 		ASCII_WIDTH,
 		{
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

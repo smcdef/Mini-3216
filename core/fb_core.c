@@ -153,36 +153,6 @@ DECLARE_MATRIX_DISP(5, P4, P0);
 DECLARE_MATRIX_DISP(6, P3, P2);
 DECLARE_MATRIX_DISP(7, P4, P2);
 
-#ifdef CONFIG_MATRIXS_TEST
-#define MATRIXS_FB_SIZE		(MATRIXS_COLUMNS << 1)
-
-void fb_matrixs_test(void)
-{
-	unsigned char i, j, k;
-	char FB_MEMORY_TYPE *fb = frame_buffer;
-	struct fb_info fb_info;
-
-	memset(&fb_info, 0, sizeof(fb_info));
-	fb_init();
-	fb_info.brightness = 50;
-
-	for (i = 0; i < MATRIXS_FB_SIZE; ++i, ++fb) {
-		for (j = 0; j < MATRIX_COLUMNS; ++j) {
-			*fb |= 1 << j;
-			for (k = 0; k < ((MATRIXS_FB_SIZE - i) >> 2) + 5; ++k)
-				fb_show(&fb_info);
-		}
-	}
-
-	for (i = 0; i < 50; ++i)
-		fb_show(&fb_info);
-}
-#else
-void fb_matrixs_test(void)
-{
-}
-#endif
-
 static void fb_show_column(struct fb_column_info idata *fb_column_info)
 {
 	char index = fb_column_info->column >> MATRIX_COLUMN_SHIFT;

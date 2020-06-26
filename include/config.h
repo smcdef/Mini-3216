@@ -33,8 +33,6 @@
 #define CONFIG_CHIME_START_HOUR			8
 #define CONFIG_CHIME_END_HOUR			22
 
-/* #define CONFIG_MATRIXS_TEST */
-
 #if CONFIG_FB_SIZE_SHIFT < 7
 #error "CONFIG_FB_SIZE_SHIFT should greater than or equal to 7"
 #endif

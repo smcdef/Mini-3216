@@ -270,14 +270,13 @@ void fb_show(struct fb_info *fb_info)
  *     [MATRIXS_COLUMNS, FB_COLUMNS].
  * @speed: The scroll speed.
  */
-unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
-		     unsigned char speed)
+int fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed)
 {
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
 	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
-		return offset;
+		return 0;
 
 	for (i = 0; i < n - MATRIXS_MAX_COLUMN; ++i) {
 		for (j = 0; j < speed; ++j)
@@ -286,7 +285,7 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 	}
 	fb_info->offset = offset;
 
-	return offset + n - MATRIXS_COLUMNS;
+	return n - MATRIXS_COLUMNS;
 }
 
 /**
@@ -297,14 +296,14 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
  *     [MATRIXS_COLUMNS, FB_COLUMNS].
  * @speed: The scroll speed.
  */
-unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
-			     unsigned char speed)
+int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
+		    unsigned char speed)
 {
 	unsigned int i, offset = fb_info->offset;
 	unsigned char j;
 
 	if (n > FB_COLUMNS || n < MATRIXS_COLUMNS)
-		return offset;
+		return 0;
 
 	for (i = 0; i < n - MATRIXS_MAX_COLUMN; ++i) {
 		for (j = 0; j < speed; ++j)
@@ -313,7 +312,7 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	}
 	fb_info->offset = offset;
 
-	return offset - (n - MATRIXS_COLUMNS);
+	return MATRIXS_COLUMNS - n;
 }
 
 /**

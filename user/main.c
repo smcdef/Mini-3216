@@ -259,7 +259,7 @@ skip_load:
 			brightness = fb_info->brightness;
 			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
 			fb_load_temperature(offset);
-			fb_info->offset = fb_scan(fb_info, 64, 1);
+			fb_info->offset += fb_scan(fb_info, 64, 1);
 			fb_info->brightness = brightness;
 			local_irq_enable();
 			is_temp = true;
@@ -280,7 +280,7 @@ skip_load:
 		 */
 		if (!user->night_mode)
 			fb_info->brightness = CONFIG_SCAN_SPEED_BRIGHTNESS;
-		fb_info->offset = fb_scan_reverse(fb_info, 64, 1);
+		fb_info->offset += fb_scan_reverse(fb_info, 64, 1);
 		fb_info->brightness = brightness;
 		local_irq_enable();
 		is_temp = false;
@@ -478,7 +478,7 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		else
 			fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				       current->name);
-		fb_info->offset = fb_scan(fb_info, 64,
+		fb_info->offset += fb_scan(fb_info, 64,
 					  CONFIG_SETTING_SCAN_SPEED);
 		break;
 	case KEY_LEFT:
@@ -487,7 +487,7 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		buzzer_key();
 		fb_copy_string(fb_info->offset - MATRIXS_COLUMNS,
 					current->sibling_prev->name);
-		fb_info->offset = fb_scan_reverse(fb_info, 64,
+		fb_info->offset += fb_scan_reverse(fb_info, 64,
 						  CONFIG_SETTING_SCAN_SPEED);
 		current = current->sibling_prev;
 		break;
@@ -497,7 +497,7 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		buzzer_key();
 		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				current->sibling_next->name);
-		fb_info->offset = fb_scan(fb_info, 64,
+		fb_info->offset += fb_scan(fb_info, 64,
 					  CONFIG_SETTING_SCAN_SPEED);
 		current = current->sibling_next;
 		break;
@@ -512,7 +512,7 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		current = current->child;
 		fb_copy_string(fb_info->offset + MATRIXS_COLUMNS,
 				current->name);
-		fb_info->offset = fb_scan(fb_info, 64,
+		fb_info->offset += fb_scan(fb_info, 64,
 					  CONFIG_SETTING_SCAN_SPEED);
 		break;
 	case KEY_LEFT | KEY_ENTER:
@@ -530,12 +530,12 @@ static bool interface_switching(struct user_data xdata *user, char key)
 		fb_info->offset = fb_scan(fb_info, 128,
 					  CONFIG_SEETING_TIME_SCAN_SPEED);
 #else
-		fb_info->offset = fb_scan_string(fb_info, MATRIXS_COLUMNS,
-						 CONFIG_SEETING_TIME_SCAN_SPEED,
-						 "设置时间");
+		fb_info->offset += fb_scan_string(fb_info, MATRIXS_COLUMNS,
+						  CONFIG_SEETING_TIME_SCAN_SPEED,
+						  "设置时间");
 		if (current->fb_load)
 			current->fb_load(fb_info->offset + MATRIXS_COLUMNS);
-		fb_info->offset = fb_scan(fb_info, 64,
+		fb_info->offset += fb_scan(fb_info, 64,
 					  CONFIG_SEETING_TIME_SCAN_SPEED);
 #endif
 		break;

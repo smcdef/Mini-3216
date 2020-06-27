@@ -48,10 +48,9 @@ struct fb_info {
 };
 
 void fb_show(struct fb_info *fb_info);
-unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
-		     unsigned char speed);
-unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
-			     unsigned char speed);
+int fb_scan(struct fb_info *fb_info, unsigned int n, unsigned char speed);
+int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
+		    unsigned char speed);
 unsigned char fb_copy(unsigned int offset, const char *src,
 		      unsigned char width);
 void fb_init(void);

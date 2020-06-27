@@ -150,6 +150,18 @@ static void led_on_delay(unsigned char i)
 	extern char __dummy_##n##_unused__
 
 #define DECLARE_MATRIX_DISP_COMBINE(n1, n2, anode, cathode)		\
+	/* Reset gpio registers */					\
+	static void gpio##n1##_init(void)				\
+	{								\
+		anode		= 0x00;					\
+		cathode		= 0x00;					\
+		anode##M1 	= 0xff;					\
+		anode##M0 	= 0xff;					\
+		cathode##M1 	= 0xff;					\
+		cathode##M0 	= 0xff;					\
+		anode		= 0xff;					\
+		cathode		= 0xff;					\
+	}								\
 	DECLARE_MATRIX_DISP(n1, anode, cathode);			\
 	DECLARE_MATRIX_DISP(n2, cathode, anode)
 
@@ -305,17 +317,8 @@ void fb_init(void)
 	for (fb = frame_buffer; fb < frame_buffer + sizeof(frame_buffer); fb++)
 		*fb = 0;
 
-	/* Reset gpio registers */
-	P0M1 = 0xff;
-	P2M1 = 0xff;
-	P3M1 = 0xff;
-	P4M1 = 0xff;
-	P0M0 = 0xff;
-	P2M0 = 0xff;
-	P3M0 = 0xff;
-	P4M0 = 0xff;
-	P0   = 0xff;
-	P2   = 0xff;
-	P3   = 0xff;
-	P4   = 0xff;
+	gpio0_init();
+	gpio1_init();
+	gpio2_init();
+	gpio3_init();
 }

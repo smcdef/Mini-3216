@@ -43,8 +43,8 @@ struct menu {
 	struct menu xdata *child;
 	struct menu xdata *sibling_next, *sibling_prev;
 	void xdata *private;
-	void (*operate)(void xdata *private);
-	unsigned int (*fb_load)(unsigned int offset);
+	void (func_prt_type *operate)(void xdata *private);
+	unsigned int (func_prt_type *fb_load)(unsigned int offset);
 };
 
 struct user_data {

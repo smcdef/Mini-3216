@@ -50,6 +50,9 @@
 #define bit		__bit
 #define interrupt	__interrupt
 #define using		__using
+#define func_prt_type
+#else
+#define func_prt_type	code
 #endif
 
 #endif

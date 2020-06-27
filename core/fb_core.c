@@ -182,8 +182,6 @@ static void fb_show_column(struct fb_column_info idata *info)
 		matrix6_disp(offset, info->byte_h, brightness, fair);
 		matrix7_disp(offset, info->byte_l, brightness, fair);
 		break;
-	default :
-		break;
 	}
 }
 
@@ -210,8 +208,6 @@ static void fb_show_column_rotate(struct fb_column_info idata *info)
 	case 3:
 		matrix1_disp_rotate(offset, info->byte_h, brightness, fair);
 		matrix0_disp_rotate(offset, info->byte_l, brightness, fair);
-		break;
-	default :
 		break;
 	}
 }

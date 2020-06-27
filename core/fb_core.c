@@ -140,11 +140,12 @@ static void led_on_delay(unsigned char i)
 		cathode = 0xff;						\
 	}								\
 									\
-	/**								\
+	/*								\
 	 * Just for macro definition ends with a semicolon		\
-	 * for Keil C51.						\
+	 * for Keil C51. Here is just a declaration, so we		\
+	 * will not allocate memory for that.				\
 	 */								\
-	static bit __dummy_##n##_unused__
+	extern char __dummy_##n##_unused__
 
 DECLARE_MATRIX_DISP(0, P0, P3);
 DECLARE_MATRIX_DISP(1, P2, P3);

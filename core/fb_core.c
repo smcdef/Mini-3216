@@ -252,7 +252,12 @@ void fb_show(struct fb_info *fb_info)
 }
 
 /**
- * @n should range [MATRIXS_COLUMNS, FB_COLUMNS]
+ * fb_scan - Scroll display to dot-matrix screen.
+ *
+ * @fb_info: The frame buffer info.
+ * @n: How many columns to display. This really should range
+ *     [MATRIXS_COLUMNS, FB_COLUMNS].
+ * @speed: The scroll speed.
  */
 unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 		     unsigned char speed)
@@ -274,7 +279,12 @@ unsigned int fb_scan(struct fb_info *fb_info, unsigned int n,
 }
 
 /**
- * @n should range [MATRIXS_COLUMNS, FB_COLUMNS]
+ * fb_scan_reverse - Reverse scroll display to dot-matrix screen.
+ *
+ * @fb_info: The frame buffer info.
+ * @n: How many columns to display. This really should range
+ *     [MATRIXS_COLUMNS, FB_COLUMNS].
+ * @speed: The scroll speed.
  */
 unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 			     unsigned char speed)
@@ -295,6 +305,13 @@ unsigned int fb_scan_reverse(struct fb_info *fb_info, unsigned int n,
 	return offset - (n - MATRIXS_COLUMNS);
 }
 
+/**
+ * fb_copy - Copy the buffer from @src to @frame_buffer.
+ *
+ * @offset: The offset relative to the frame_buffer.
+ * @src: The buffer to copy from.
+ * @width: The width of the buffer. This is 2 times of the @src buffer size.
+ */
 unsigned char fb_copy(unsigned int offset, const char *src, unsigned char width)
 {
 	char FB_MEMORY_TYPE *fb = frame_buffer +

@@ -149,14 +149,14 @@ static void led_on_delay(unsigned char i)
 	 */								\
 	extern char __dummy_##n##_unused__
 
-DECLARE_MATRIX_DISP(0, P0, P3);
-DECLARE_MATRIX_DISP(1, P2, P3);
-DECLARE_MATRIX_DISP(2, P0, P4);
-DECLARE_MATRIX_DISP(3, P2, P4);
-DECLARE_MATRIX_DISP(4, P3, P0);
-DECLARE_MATRIX_DISP(5, P4, P0);
-DECLARE_MATRIX_DISP(6, P3, P2);
-DECLARE_MATRIX_DISP(7, P4, P2);
+#define DECLARE_MATRIX_DISP_COMBINE(n1, n2, anode, cathode)		\
+	DECLARE_MATRIX_DISP(n1, anode, cathode);			\
+	DECLARE_MATRIX_DISP(n2, cathode, anode)
+
+DECLARE_MATRIX_DISP_COMBINE(0, 4, P0, P3);
+DECLARE_MATRIX_DISP_COMBINE(1, 6, P2, P3);
+DECLARE_MATRIX_DISP_COMBINE(2, 5, P0, P4);
+DECLARE_MATRIX_DISP_COMBINE(3, 7, P2, P4);
 
 static void fb_show_column(struct fb_column_info idata *info)
 {

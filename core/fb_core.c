@@ -108,7 +108,7 @@ static void led_on_delay(unsigned char i)
 		anode##M1 = 0xff;					\
 	} while (0)
 
-#define DECLARE_MATRIX_DISP(n, anode, cathode)				\
+#define DEFINE_MATRIX_DISP(n, anode, cathode)				\
 	static void matrix##n##_disp(char column, char dat,		\
 				     unsigned char brightness,		\
 				     unsigned char fair)		\
@@ -157,7 +157,7 @@ static void led_on_delay(unsigned char i)
 	 */								\
 	extern char __dummy_##n##_unused__
 
-#define DECLARE_GPIO_INIT(n, anode, cathode)				\
+#define DEFINE_GPIO_INIT(n, anode, cathode)				\
 	/* Reset gpio registers */					\
 	static void gpio##n##_init(void)				\
 	{								\
@@ -171,15 +171,15 @@ static void led_on_delay(unsigned char i)
 		cathode		= 0xff;					\
 	}
 
-#define DECLARE_MATRIX_DISP_COMBINE(n1, n2, anode, cathode)		\
-	DECLARE_GPIO_INIT(n1, anode, cathode)				\
-	DECLARE_MATRIX_DISP(n1, anode, cathode);			\
-	DECLARE_MATRIX_DISP(n2, cathode, anode)
+#define DEFINE_MATRIX_DISP_COMBINE(n1, n2, anode, cathode)		\
+	DEFINE_GPIO_INIT(n1, anode, cathode)				\
+	DEFINE_MATRIX_DISP(n1, anode, cathode);				\
+	DEFINE_MATRIX_DISP(n2, cathode, anode)
 
-DECLARE_MATRIX_DISP_COMBINE(0, 4, ANODE_PORT0, CATHODE_PORT0);
-DECLARE_MATRIX_DISP_COMBINE(1, 6, ANODE_PORT1, CATHODE_PORT0);
-DECLARE_MATRIX_DISP_COMBINE(2, 5, ANODE_PORT0, CATHODE_PORT1);
-DECLARE_MATRIX_DISP_COMBINE(3, 7, ANODE_PORT1, CATHODE_PORT1);
+DEFINE_MATRIX_DISP_COMBINE(0, 4, ANODE_PORT0, CATHODE_PORT0);
+DEFINE_MATRIX_DISP_COMBINE(1, 6, ANODE_PORT1, CATHODE_PORT0);
+DEFINE_MATRIX_DISP_COMBINE(2, 5, ANODE_PORT0, CATHODE_PORT1);
+DEFINE_MATRIX_DISP_COMBINE(3, 7, ANODE_PORT1, CATHODE_PORT1);
 
 static void fb_show_column(struct fb_column_info idata *info)
 {

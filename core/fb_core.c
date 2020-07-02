@@ -93,7 +93,7 @@ struct fb_column_info {
 	unsigned char brightness;
 };
 
-static void led_on_delay(unsigned char i)
+static inline void led_on_delay(unsigned char i)
 {
 	while (i--);
 }

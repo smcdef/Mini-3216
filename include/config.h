@@ -53,6 +53,7 @@
 #define func_prt_type
 #else
 #define func_prt_type	code
+#define inline
 #endif
 
 #endif
